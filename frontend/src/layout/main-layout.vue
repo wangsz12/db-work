@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   IconHome,
   IconBook,
@@ -15,7 +15,7 @@ import {
   IconCaretDown
 } from '@arco-design/web-vue/es/icon'
 
-const router = useRouter();
+const router = useRouter()
 
 const userInfo = reactive({
   name: 'Test'
@@ -329,7 +329,7 @@ function logout() {
               .dropdown-content {
                 font-size: .9rem;
                 display: flex;
-                align-content: center;
+                align-items: center;
 
                 span:nth-child(2) {
                   padding-left: 1rem;

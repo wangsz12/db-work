@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   IconHome,
@@ -14,12 +14,11 @@ import {
   IconUser,
   IconCaretDown
 } from '@arco-design/web-vue/es/icon'
+import { useUserStore } from '@/store/user'
 
 const router = useRouter()
 
-const userInfo = reactive({
-  name: 'Test'
-})
+const userInfo = useUserStore()
 let showTitleBar = ref(false)
 let contentTitle = ref('Title')
 
@@ -60,7 +59,7 @@ function logout() {
             <menu-item
               text="借出登记"
               name="LendRegistration"
-              to="/lend"
+              to="/books/lend"
             >
               <icon-export size="large" />
             </menu-item>
@@ -138,7 +137,10 @@ function logout() {
       <div class="user-box">
         <div class="dropdown-box">
           <div class="info-box">
-            <a-avatar :style="{ backgroundColor: 'rgb(127, 99, 244)' }">
+            <a-avatar
+              :style="{ backgroundColor: 'rgb(127, 99, 244)' }"
+              :size="36"
+            >
               <IconUser />
             </a-avatar>
             <span style="cursor: default;">{{ userInfo.name }}</span>
@@ -170,10 +172,10 @@ function logout() {
       </div>
       <div class="page-box">
         <div class="page">
-          <router-view />
+          <RouterView />
         </div>
         <div class="copyright">
-          <span>2020 &copy; 升华工作室</span>
+          <span>2022 &copy; wangsz12</span>
         </div>
       </div>
     </main>
@@ -273,11 +275,12 @@ function logout() {
       box-shadow: 0 0 .2px .2px rgba(0, 0, 0, 0.1);
 
       .user-box {
+        // height: 100%;
         display: flex;
         align-items: center;
         position: absolute;
         right: 2rem;
-        top: 1rem;
+        top: calc(($header-height - 48px) / 2);
         min-width: 10rem;
 
         .dropdown-box {
@@ -286,13 +289,14 @@ function logout() {
           position: relative;
 
           .info-box {
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding-bottom: .5rem;
 
             span:nth-child(2) {
-              height: 100%;
+              // height: 100%;
               padding-left: .8rem;
               padding-right: .5rem;
               line-height: 1.9rem;
@@ -364,7 +368,7 @@ function logout() {
       }
 
       .page-box {
-        width: 100%;
+        // width: 100%;
         padding: 2rem;
 
         .copyright {

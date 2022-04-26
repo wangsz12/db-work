@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useGlobalStore } from '@/store'
+import { useMessage } from '@/utils'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 interface Props {
   text: string,
@@ -14,16 +16,22 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const emits = defineEmits(['click'])
 
-const router = useRouter();
+const router = useRouter()
+const global = useGlobalStore()
+const $message = useMessage()
 
-let isSelected = ref(false)
+let isSelected = ref(props.name === global.selectedItemName)
+watch(() => global.selectedItemName, (newVal) => {
+  isSelected.value = (props.name === newVal)
+})
 
 function onClick() {
   if (props.name === 'logout') {
+    $message.success('已退出登录')
     emits('click')
   }
   else {
-    // this.setSelectedItemName(this.name)
+    global.setSelectedItemName(props.name)
     router.push(props.to)
   }
 }

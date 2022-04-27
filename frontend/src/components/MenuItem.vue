@@ -25,7 +25,7 @@ watch(() => global.selectedItemName, (newVal) => {
   isSelected.value = (props.name === newVal)
 })
 
-function onClick() {
+function handleClick() {
   if (props.name === 'logout') {
     $message.success('已退出登录')
     emits('click')
@@ -41,7 +41,7 @@ function onClick() {
 <template>
   <div
     :class="isSelected ? 'selected' : 'unselected'"
-    @click="onClick"
+    @click="handleClick"
   >
     <div class="menu-item--container">
       <div class="menu-item--content-container">

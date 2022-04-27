@@ -38,7 +38,7 @@ function logout() {
       <div class="side-bar">
         <menu-item
           text="首页"
-          name="Index"
+          name="index"
           to="/"
         >
           <icon-home size="large" />
@@ -51,22 +51,22 @@ function logout() {
           <div>
             <menu-item
               text="全部图书"
-              name="AllBooks"
+              name="all-books"
               to="/books"
             >
               <icon-book size="large" />
             </menu-item>
             <menu-item
               text="借出登记"
-              name="LendRegistration"
+              name="lend-books"
               to="/books/lend"
             >
               <icon-export size="large" />
             </menu-item>
             <menu-item
               text="归还登记"
-              name="ReturnRegistration"
-              to="/return"
+              name="return-books"
+              to="/books/return"
             >
               <icon-import size="large" />
             </menu-item>
@@ -80,14 +80,14 @@ function logout() {
           <div>
             <menu-item
               text="罚款记录"
-              name="FineRecord"
+              name="all-fines"
               to="/fines"
             >
               <icon-unordered-list size="large" />
             </menu-item>
             <menu-item
               text="缴纳罚款"
-              name="PayFine"
+              name="pay-fine"
               to="/pay-fine"
             >
               <icon-computer size="large" />
@@ -102,14 +102,14 @@ function logout() {
           <div>
             <menu-item
               text="全部出版商"
-              name="AllPublisher"
+              name="all-publishers"
               to="/publishers"
             >
               <icon-printer size="large" />
             </menu-item>
             <menu-item
               text="订购图书"
-              name="PurchaseBooks"
+              name="purchase"
               to="/purchase"
             >
               <icon-plus-circle size="large" />

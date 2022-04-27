@@ -1,20 +1,30 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+
 interface Props {
   title: string,
-  value: number | string
+  value: number | string,
+  clickTo?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   title: '',
-  value: -1
+  value: -1,
+  clickTo: ''
 })
 
-const emits = defineEmits(['click'])
+const router = useRouter()
+
+function handleClick() {
+  if (props.clickTo !== '') {
+    router.push(props.clickTo)
+  }
+}
 </script>
 
 <template>
   <div
     class="data-box--container"
-    @click="emits('click')"
+    @click="handleClick"
   >
     <div class="icon-box">
       <i class="icon">

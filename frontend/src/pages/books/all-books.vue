@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getBookDataBox, getBooks } from "@/apis/books"
 import { withAlignCenter } from "@/utils"
 import { TableColumnData, TableData } from "@arco-design/web-vue"
 import {
@@ -6,7 +7,7 @@ import {
   IconExport,
   IconTags
 } from "@arco-design/web-vue/es/icon"
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
 
 const columns: TableColumnData[] = withAlignCenter([
   {
@@ -44,19 +45,39 @@ const columns: TableColumnData[] = withAlignCenter([
   },
 ])
 
-const data: TableData[] = reactive(Array(10).fill('').map((_, index) => ({
-  key: String(index),
-  id: 'b000001',
-  name: '图解HTTP',
-  author: '[日]上野 宣',
-  quantity: 10,
-  category: '计算机/网络',
-  publisher: '人民邮电出版社',
-  isbn: '9798115351531'
-})))
+const total = ref(0)
+const tableData: TableData[] = reactive([])
+const dataBox = reactive({
+  books: -1,
+  lend: -1,
+  categories: -1
+})
+const loading = ref(true)
 
-function onTablePageChange(page: number) {
-  console.log(page)
+getBookDataBox()
+  .then(({data: res}) => {
+    Object.assign(dataBox, res.data)
+  })
+
+getBooks()
+  .then(({data: res}) => {
+    total.value = res.data.total
+    tableData.push(...res.data.books)
+  })
+  .finally(() => {
+    loading.value = false
+  })
+
+function handleTablePageChange(page: number) {
+  getBooks(page)
+    .then(({data: res}) => {
+      total.value = res.data.total
+      tableData.splice(0, 10)
+      tableData.push(...res.data.books)
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 </script>
 
@@ -65,19 +86,19 @@ function onTablePageChange(page: number) {
     <div class="data-box">
       <DataBox
         title="图书总数量"
-        :value="1564"
+        :value="dataBox.books"
       >
         <icon-book :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
         title="外借数量"
-        :value="745"
+        :value="dataBox.lend"
       >
         <icon-export :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
-        title="图书分类数量"
-        :value="5"
+        title="图书类别数量"
+        :value="dataBox.categories"
       >
         <icon-tags :style="{fontSize: '22px'}" />
       </DataBox>
@@ -87,9 +108,14 @@ function onTablePageChange(page: number) {
       <a-table
         class="table"
         :columns="columns"
-        :data="data"
+        :data="tableData"
+        :pagination="{
+          total,
+          showTotal: true,
+          showJumper: true
+        }"
         page-position="bottom"
-        @page-change="onTablePageChange"
+        @page-change="handleTablePageChange"
       />
     </div>
   </div>

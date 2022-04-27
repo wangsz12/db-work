@@ -7,9 +7,11 @@ import {
   IconExport,
   IconComputer
 } from '@arco-design/web-vue/es/icon'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { TableColumnData, TableData } from '@arco-design/web-vue'
 import { withAlignCenter } from '@/utils'
+import { getRecentRecord } from '@/apis/books'
+import { getIndexDataBox } from '@/apis/other'
 
 let greeting = (() => {
   const hour = dayjs().hour()
@@ -45,7 +47,7 @@ const columns: TableColumnData[] = withAlignCenter([
   },
   {
     title: '归还期限',
-    dataIndex: 'timeLimit',
+    dataIndex: 'deadline',
     width: 200
   },
   {
@@ -56,53 +58,27 @@ const columns: TableColumnData[] = withAlignCenter([
   }
 ])
 
-const data: TableData[] = reactive([
-  {
-    key: '1',
-    status: '借出',
-    cardID: '1000001',
-    name: '图解HTTP',
-    author: '[日]上野 宣',
-    timeLimit: '2022-05-26',
-    isOverdue: false
-  },
-  {
-    key: '2',
-    status: '借出',
-    cardID: '1000001',
-    name: '图解HTTP',
-    author: '[日]上野 宣',
-    timeLimit: '2022-05-26',
-    isOverdue: false
-  },
-  {
-    key: '3',
-    status: '借出',
-    cardID: '1000001',
-    name: '图解HTTP',
-    author: '[日]上野 宣',
-    timeLimit: '2022-05-26',
-    isOverdue: false
-  },
-  {
-    key: '4',
-    status: '借出',
-    cardID: '1000001',
-    name: '图解HTTP',
-    author: '[日]上野 宣',
-    timeLimit: '2022-05-26',
-    isOverdue: false
-  },
-  {
-    key: '5',
-    status: '借出',
-    cardID: '1000001',
-    name: '图解HTTP',
-    author: '[日]上野 宣',
-    timeLimit: '2022-05-26',
-    isOverdue: false
-  }
-])
+const tableData: TableData[] = reactive([])
+const dataBox = reactive({
+  books: -1,
+  readers: -1,
+  lend: -1,
+  unpaidFine: -1
+})
+const loading = ref(true)
+
+getRecentRecord()
+  .then(({data: res}) => {
+    tableData.push(...res.data as TableData[])
+  })
+  .finally(() => {
+    loading.value = false
+  })
+
+getIndexDataBox()
+  .then(({data: res}) => {
+    Object.assign(dataBox, res.data)
+  })
 </script>
 
 <template>
@@ -114,25 +90,26 @@ const data: TableData[] = reactive([
     <div class="data-box">
       <DataBox
         title="图书总数"
-        :value="1564"
+        :value="dataBox.books"
+        click-to="/books"
       >
         <icon-book :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
         title="注册读者数"
-        :value="745"
+        :value="dataBox.readers"
       >
         <icon-user :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
         title="已借出图书"
-        :value="545"
+        :value="dataBox.lend"
       >
         <icon-export :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
         title="欠缴罚款数"
-        :value="976"
+        :value="dataBox.unpaidFine"
       >
         <icon-computer :style="{fontSize: '22px'}" />
       </DataBox>
@@ -142,8 +119,9 @@ const data: TableData[] = reactive([
       <a-table
         class="table"
         :columns="columns"
-        :data="data"
+        :data="tableData"
         :pagination="false"
+        :loading="loading"
       >
         <template #status="{ record }">
           <span :style="`color: ${record.status === '归还' ? '#0de20d' : '#fc243a'}`">{{ record.status }}</span>

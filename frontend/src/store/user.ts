@@ -11,5 +11,8 @@ export const useUserStore = defineStore({
     setName(name: string) {
       this.name = name
     }
+  },
+  persist: {
+    enabled: true
   }
 })

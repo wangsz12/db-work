@@ -11,5 +11,8 @@ export const useGlobalStore = defineStore({
     setSelectedItemName(selectedItemName: string) {
       this.selectedItemName = selectedItemName
     }
+  },
+  persist: {
+    enabled: true
   }
 })

@@ -27,6 +27,11 @@ const routes: RouteRecordRaw[] = [
         path: 'lend',
         name: 'lend-books',
         component: () => import('@/pages/books/lend.vue')
+      },
+      {
+        path: 'return',
+        name: 'return-books',
+        component: () => import('@/pages/books/return.vue')
       }
     ]
   },

@@ -58,12 +58,12 @@ export function getBookDataBox() {
   })
 }
 
-export function getBooks(page = 1) {
+export function getBooksByPage(page = 1) {
   console.log('page: ', page)
   return mockAPIReturn({
     total: 1564,
     books: Array(10).fill('').map((_, index) => ({
-      id: `b${('0000000' + (10 * page + index + 1)).slice(-7)}`,
+      id: `B${('0000000' + (10 * page + index + 1)).slice(-7)}`,
       name: '图解HTTP',
       author: '[日]上野 宣',
       quantity: 10,

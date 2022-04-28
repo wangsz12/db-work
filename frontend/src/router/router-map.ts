@@ -29,14 +29,36 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/books/all-books.vue')
       },
       {
+        path: 'lend/record',
+        name: 'lend-records',
+        component: () => import('@/pages/books/lend-record.vue')
+      },
+      {
         path: 'lend',
         name: 'lend-books',
         component: () => import('@/pages/books/lend.vue')
       },
       {
+        path: 'return/record',
+        name: 'return-records',
+        component: () => import('@/pages/books/return-record.vue')
+      },
+      {
         path: 'return',
         name: 'return-books',
         component: () => import('@/pages/books/return.vue')
+      }
+    ]
+  },
+  {
+    path: '/cards',
+    name: 'cards',
+    component: () => import('@/layout/main-layout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-cards',
+        component: () => import('@/pages/cards/all-cards.vue')
       }
     ]
   },

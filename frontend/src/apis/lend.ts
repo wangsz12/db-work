@@ -33,4 +33,3 @@ export function getLendRecordsByID(id: string) {
     fine: 30.26
   })
 }
-

@@ -1,4 +1,4 @@
-import Axios from "@/config/axios"
+// import Axios from "@/config/axios"
 import { mockAPIReturn } from "@/utils"
 
 export function getIndexDataBox() {
@@ -7,6 +7,6 @@ export function getIndexDataBox() {
     books: 1564,
     readers: 745,
     lend: 545,
-    unpaidFine: 976
+    unpaidFine: 76
   })
 }

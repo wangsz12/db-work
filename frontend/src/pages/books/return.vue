@@ -79,15 +79,15 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
         >
           <a-form-item
             field="cardID"
-            label="借阅证号"
+            label="读者证号"
             :rules="[
               {
                 required: true,
-                message: '借阅证号为必填'
+                message: '读者证号为必填'
               },
               {
                 match: /^1\d{6}$/,
-                message: '请检查借阅证号是否合法'
+                message: '请检查读者证号是否合法'
               }
             ]"
             validate-trigger="input"
@@ -95,7 +95,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
           >
             <a-input
               v-model="form.cardID"
-              placeholder="请输入借阅证号"
+              placeholder="请输入读者证号"
             />
           </a-form-item>
           <a-form-item

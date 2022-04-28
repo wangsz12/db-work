@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getBookDataBox, getBooks } from "@/apis/books"
+import { getBookDataBox, getBooksByPage } from "@/apis/book"
 import { withAlignCenter } from "@/utils"
 import { TableColumnData, TableData } from "@arco-design/web-vue"
 import {
@@ -60,7 +60,7 @@ getBookDataBox()
     Object.assign(dataBox, res.data)
   })
 
-getBooks()
+getBooksByPage()
   .then(({data: res}) => {
     total.value = res.data.total
     tableData.push(...res.data.books)
@@ -70,9 +70,8 @@ getBooks()
   })
 
 function handleTablePageChange(page: number) {
-  getBooks(page)
+  getBooksByPage(page)
     .then(({data: res}) => {
-      total.value = res.data.total
       tableData.splice(0, 10)
       tableData.push(...res.data.books)
     })
@@ -95,7 +94,7 @@ function handleTablePageChange(page: number) {
         <icon-book :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
-        title="外借数量"
+        title="在借数量"
         :value="dataBox.lend"
       >
         <icon-export :style="{fontSize: '22px'}" />
@@ -131,40 +130,10 @@ function handleTablePageChange(page: number) {
     width: 100%;
     display: block;
 
-    .greeting-box {
-      height: 1.8rem;
-      min-width: 100%;
-      margin-bottom: 1.7rem;
-      overflow: hidden;
-
-      span {
-        display: inline-block;
-      }
-
-      span:nth-child(1) {
-        font-size: 1.1rem;
-        margin-left: 1rem;
-        animation: greeting-show .8s ease;
-      }
-
-      span:nth-child(2) {
-        font-size: 1.4rem;
-        animation: greeting-show .8s ease .3s;
-        animation-fill-mode: forwards;
-        transform: translateY(2rem);
-      }
-    }
-
     .content-box {
       @extend .component;
       margin-top: 1.5rem;
       padding: 1.5rem;
-
-      .search-box {
-        height: 10rem;
-        width: 100%;
-        background-color: pink;
-      }
       
       .content-title {
         font-size: 1.3rem;
@@ -174,16 +143,6 @@ function handleTablePageChange(page: number) {
       .table {
         margin-top: 1rem;
       }
-    }
-  }
-
-  @keyframes greeting-show {
-    from {
-      transform: translateY(1.8rem);
-    }
-
-    to {
-      transform: translateY(0);
     }
   }
 </style>

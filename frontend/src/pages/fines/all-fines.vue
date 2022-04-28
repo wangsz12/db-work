@@ -23,7 +23,7 @@ const columns: TableColumnData[] = withAlignCenter([
     width: 130
   },
   {
-    title: '借阅证号',
+    title: '读者证号',
     dataIndex: 'cardID',
     width: 140
   },
@@ -66,8 +66,6 @@ getFines()
 function handleTablePageChange(page: number) {
   getFines(page)
     .then(({data: res}) => {
-      total.value = res.data.total
-
       tableData.splice(0, 10)
       tableData.push(...res.data.fines)
     })
@@ -132,40 +130,10 @@ function handleTablePageChange(page: number) {
     width: 100%;
     display: block;
 
-    .greeting-box {
-      height: 1.8rem;
-      min-width: 100%;
-      margin-bottom: 1.7rem;
-      overflow: hidden;
-
-      span {
-        display: inline-block;
-      }
-
-      span:nth-child(1) {
-        font-size: 1.1rem;
-        margin-left: 1rem;
-        animation: greeting-show .8s ease;
-      }
-
-      span:nth-child(2) {
-        font-size: 1.4rem;
-        animation: greeting-show .8s ease .3s;
-        animation-fill-mode: forwards;
-        transform: translateY(2rem);
-      }
-    }
-
     .content-box {
       @extend .component;
       margin-top: 1.5rem;
       padding: 1.5rem;
-
-      .search-box {
-        height: 10rem;
-        width: 100%;
-        background-color: pink;
-      }
       
       .content-title {
         font-size: 1.3rem;
@@ -175,16 +143,6 @@ function handleTablePageChange(page: number) {
       .table {
         margin-top: 1rem;
       }
-    }
-  }
-
-  @keyframes greeting-show {
-    from {
-      transform: translateY(1.8rem);
-    }
-
-    to {
-      transform: translateY(0);
     }
   }
 </style>

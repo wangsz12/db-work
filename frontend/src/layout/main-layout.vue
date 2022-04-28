@@ -12,7 +12,8 @@ import {
   IconPlusCircle,
   IconPoweroff,
   IconUser,
-  IconCaretDown
+  IconCaretDown,
+  IconBookmark
 } from '@arco-design/web-vue/es/icon'
 import { useUserStore } from '@/store/user'
 
@@ -57,6 +58,13 @@ function logout() {
               <icon-book size="large" />
             </menu-item>
             <menu-item
+              text="借出记录"
+              name="lend-records"
+              to="/books/lend/record"
+            >
+              <icon-unordered-list size="large" />
+            </menu-item>
+            <menu-item
               text="借出登记"
               name="lend-books"
               to="/books/lend"
@@ -64,11 +72,40 @@ function logout() {
               <icon-export size="large" />
             </menu-item>
             <menu-item
+              text="归还记录"
+              name="return-records"
+              to="/books/return/record"
+            >
+              <icon-unordered-list size="large" />
+            </menu-item>
+            <menu-item
               text="归还登记"
               name="return-books"
               to="/books/return"
             >
               <icon-import size="large" />
+            </menu-item>
+          </div>
+        </div>
+        <div class="divider" />
+        <div id="books-manage">
+          <div class="side-bar-title">
+            <span>读者证管理</span>
+          </div>
+          <div>
+            <menu-item
+              text="全部读者证"
+              name="all-cards"
+              to="/cards"
+            >
+              <icon-bookmark size="large" />
+            </menu-item>
+            <menu-item
+              text="新增读者证"
+              name="add-cards"
+              to="/cards/new"
+            >
+              <icon-plus-circle size="large" />
             </menu-item>
           </div>
         </div>

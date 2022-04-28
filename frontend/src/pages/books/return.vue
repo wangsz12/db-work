@@ -16,7 +16,6 @@ const form = reactive({
 const lendRecords: Partial<LendRecord>[] = reactive([])
 const visible = ref(false)
 const currentRecord: Partial<LendRecord> = reactive({})
-const recordFilled = ref()
 
 function handleCardIDChange(e: Event) {
   const cardID: string = (e.target as HTMLInputElement).value
@@ -31,7 +30,8 @@ function handleCardIDChange(e: Event) {
 
 function handleModalOK(done: (closed: boolean) => void) {
   if (form.lendID === '') {
-    $message.error('请选择借阅记录')
+    $message.warning('请选择借阅记录')
+    done(false)
     return
   }
   
@@ -39,8 +39,7 @@ function handleModalOK(done: (closed: boolean) => void) {
     .then(({data: res}) => {
       Object.assign(currentRecord, res.data)
     })
-  console.log(form.lendID)
-  recordFilled.value = 'success'
+
   done(true)
 }
 
@@ -100,13 +99,14 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             />
           </a-form-item>
           <a-form-item
-            field="lendRecord"
+            field="lendID"
             label="借阅记录"
-            :rules="[{
-              required: true,
-              message: '借阅记录为必填'
-            }]"
-            :validate-status="recordFilled"
+            :rules="[
+              {
+                required: true,
+                message: '借阅记录为必填'
+              }
+            ]"
           >
             <span
               v-if="form.lendID !== ''"

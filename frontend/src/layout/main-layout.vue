@@ -88,7 +88,7 @@ function logout() {
             <menu-item
               text="缴纳罚款"
               name="pay-fine"
-              to="/pay-fine"
+              to="/fines/pay"
             >
               <icon-computer size="large" />
             </menu-item>

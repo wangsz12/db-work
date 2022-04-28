@@ -2,6 +2,11 @@ import { RouteRecordRaw } from "vue-router"
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/pages/login.vue')
+  },
+  {
     path: '/',
     name: 'layout',
     component: () => import('@/layout/main-layout.vue'),
@@ -36,9 +41,21 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/pages/login.vue')
+    path: '/fines',
+    name: 'fines',
+    component: () => import('@/layout/main-layout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-fines',
+        component: () => import('@/pages/fines/all-fines.vue')
+      },
+      {
+        path: 'pay',
+        name: 'pay-fine',
+        component: () => import('@/pages/fines/pay-fine.vue')
+      }
+    ]
   },
   {
     path: '/:pathMatch(.*)',

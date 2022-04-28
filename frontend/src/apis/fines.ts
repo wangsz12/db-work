@@ -21,7 +21,7 @@ export function getFineRecordsByCardID(cardID: string) {
   console.log('cardID: ', cardID)
   return mockAPIReturn([
     {
-      id: 'f00001',
+      id: 'F00001',
       record: '图解HTTP / [日]上野 宣 / ￥3.27'
     }
   ])
@@ -30,7 +30,7 @@ export function getFineRecordsByCardID(cardID: string) {
 export function getFineRecordsByID(id: string) {
   console.log('id: ', id)
   return mockAPIReturn({
-    id: 'f00001',
+    id: 'F00001',
     record: '图解HTTP / [日]上野 宣 / ￥3.27',
     book: {
       id: 'b000001',

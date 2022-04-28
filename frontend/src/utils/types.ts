@@ -9,12 +9,6 @@ export interface Response {
   data: APIResult
 }
 
-export interface LendRequest {
-  cardID: string,
-  bookID: string,
-  duration: number
-}
-
 export interface LendRecord {
   id: string,
   record: string,
@@ -30,7 +24,30 @@ export interface LendRecord {
   fine: number
 }
 
+export interface LendRequest {
+  cardID: string,
+  bookID: string,
+  duration: number
+}
+
 export interface ReturnRequest {
   cardID: string,
   lendID: string
+}
+
+export interface FineRecord {
+  id: string,
+  record: string,
+  book: {
+    id: string,
+    name: string,
+    author: string,
+    isbn: string
+  },
+  fine: number
+}
+
+export interface PayFineRequest {
+  cardID: string,
+  fineID: string
 }

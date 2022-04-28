@@ -10,7 +10,7 @@ import {
 import { reactive, ref } from 'vue'
 import { TableColumnData, TableData } from '@arco-design/web-vue'
 import { withAlignCenter } from '@/utils'
-import { getRecentRecord } from '@/apis/books'
+import { getRecentRecord } from '@/apis/book'
 import { getIndexDataBox } from '@/apis/other'
 
 let greeting = (() => {
@@ -102,7 +102,7 @@ getIndexDataBox()
         <icon-user :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
-        title="已借出图书"
+        title="在借图书"
         :value="dataBox.lend"
       >
         <icon-export :style="{fontSize: '22px'}" />

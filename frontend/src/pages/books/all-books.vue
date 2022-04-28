@@ -54,6 +54,7 @@ const dataBox = reactive({
 })
 const loading = ref(true)
 
+// 获取信息
 getBookDataBox()
   .then(({data: res}) => {
     Object.assign(dataBox, res.data)
@@ -83,7 +84,10 @@ function handleTablePageChange(page: number) {
 
 <template>
   <div class="container">
-    <div class="data-box">
+    <div
+      class="data-box"
+      style="width: 80%"
+    >
       <DataBox
         title="图书总数量"
         :value="dataBox.books"
@@ -149,11 +153,6 @@ function handleTablePageChange(page: number) {
         animation-fill-mode: forwards;
         transform: translateY(2rem);
       }
-    }
-
-    .data-box {
-      @extend .data-box;
-      width: 100%;
     }
 
     .content-box {

@@ -59,6 +59,11 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'all-cards',
         component: () => import('@/pages/cards/all-cards.vue')
+      },
+      {
+        path: 'new',
+        name: 'new-card',
+        component: () => import('@/pages/cards/new-card.vue')
       }
     ]
   },
@@ -76,6 +81,23 @@ const routes: RouteRecordRaw[] = [
         path: 'pay',
         name: 'pay-fine',
         component: () => import('@/pages/fines/pay-fine.vue')
+      }
+    ]
+  },
+  {
+    path: '/publishers',
+    name: 'publishers',
+    component: () => import('@/layout/main-layout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-publishers',
+        component: () => import('@/pages/publishers/all-publishers.vue')
+      },
+      {
+        path: 'purchase',
+        name: 'purchase-book',
+        component: () => import('@/pages/publishers/purchase-book.vue')
       }
     ]
   },

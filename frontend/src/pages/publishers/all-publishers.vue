@@ -70,7 +70,7 @@ function handleTablePageChange(page: number) {
       </DataBox>
     </div>
     <div class="content-box">
-      <span class="content-title">图书信息</span>
+      <span class="content-title">出版商信息</span>
       <a-table
         class="table"
         :columns="columns"

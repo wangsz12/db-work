@@ -1,4 +1,5 @@
 import { mockAPIReturn } from "@/utils"
+import { CreateCardRequest } from "@/utils/types"
 
 export function getCardDataBox() {
   return mockAPIReturn({
@@ -25,4 +26,11 @@ export function getCardsByPage(page = 1) {
 export function deleteCardByID(id: string){
   console.log('id: ', id)
   return mockAPIReturn()
+}
+
+export function createCard({ name, gender, contact, address }: CreateCardRequest) {
+  console.log('name, gender, contact, address: ', name, gender, contact, address)
+  return mockAPIReturn({
+    id: 'R000001'
+  })
 }

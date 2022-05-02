@@ -147,7 +147,7 @@ function logout() {
             <menu-item
               text="订购图书"
               name="purchase"
-              to="/purchase"
+              to="/publishers/purchase"
             >
               <icon-plus-circle size="large" />
             </menu-item>

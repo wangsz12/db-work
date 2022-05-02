@@ -60,7 +60,7 @@ getReturnRecordByPage()
 function handleTablePageChange(page: number) {
   getReturnRecordByPage(page)
     .then(({data: res}) => {
-      tableData.splice(0, 10)
+      tableData.length = 0
       tableData.push(...res.data.records)
     })
 }

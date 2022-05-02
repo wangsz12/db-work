@@ -49,7 +49,7 @@ const total = ref(0)
 function handleTablePageChange(page: number) {
   getLendRecordsByPage(page)
     .then(({data: res}) => {
-      tableData.splice(0, 10)
+      tableData.length = 0
       tableData.push(...res.data.records)
     })
 }

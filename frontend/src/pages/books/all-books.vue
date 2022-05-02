@@ -72,7 +72,7 @@ getBooksByPage()
 function handleTablePageChange(page: number) {
   getBooksByPage(page)
     .then(({data: res}) => {
-      tableData.splice(0, 10)
+      tableData.length = 0
       tableData.push(...res.data.books)
     })
     .finally(() => {

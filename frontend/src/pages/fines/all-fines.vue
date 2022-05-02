@@ -59,14 +59,14 @@ getFines()
   .then(({data: res}) => {
     total.value = res.data.total
 
-    tableData.splice(0, 10)
+    tableData.length = 0
     tableData.push(...res.data.fines)
   })
 
 function handleTablePageChange(page: number) {
   getFines(page)
     .then(({data: res}) => {
-      tableData.splice(0, 10)
+      tableData.length = 0
       tableData.push(...res.data.fines)
     })
 }

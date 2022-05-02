@@ -22,7 +22,7 @@ function handleCardIDChange(e: Event) {
   if (/^1\d{6}$/.test(cardID)) {
     getLendRecordsByCardID(cardID)
       .then(({data: res}) => {
-        lendRecords.splice(0, lendRecords.length)
+        lendRecords.length = 0
         lendRecords.push(...res.data)
       })
   }
@@ -48,10 +48,8 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
   if (errors) {
     return
   }
-  
-  const { cardID, lendID } = values
 
-  returnBook({ cardID, lendID })
+  returnBook(values)
     .then(() => {
       $message.success('归还成功')
       router.push('/books')

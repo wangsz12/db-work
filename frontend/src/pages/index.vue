@@ -98,18 +98,21 @@ getIndexDataBox()
       <DataBox
         title="注册读者数"
         :value="dataBox.readers"
+        click-to="/cards"
       >
         <icon-user :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
         title="在借图书"
         :value="dataBox.lend"
+        click-to="/books/lend/record"
       >
         <icon-export :style="{fontSize: '22px'}" />
       </DataBox>
       <DataBox
         title="欠缴罚款数"
         :value="dataBox.unpaidFine"
+        click-to="/fines"
       >
         <icon-computer :style="{fontSize: '22px'}" />
       </DataBox>

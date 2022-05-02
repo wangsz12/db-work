@@ -51,3 +51,24 @@ export interface PayFineRequest {
   cardID: string,
   fineID: string
 }
+
+export interface CreateCardRequest {
+  name: string,
+  gender: number,
+  contact: string,
+  address: string
+}
+
+export interface BookListItem {
+  id: string,
+  record: string,
+  name: string,
+  author: string,
+  isbn: string,
+  price: number
+}
+
+export interface PurchaseRequest {
+  bookID: string,
+  price: number
+}

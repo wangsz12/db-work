@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     AFormItem: typeof import('@arco-design/web-vue')['FormItem']
     AIcon: typeof import('@arco-design/web-vue')['Icon']
     AInput: typeof import('@arco-design/web-vue')['Input']
+    AInputNumber: typeof import('@arco-design/web-vue')['InputNumber']
     AModal: typeof import('@arco-design/web-vue')['Modal']
     AOption: typeof import('@arco-design/web-vue')['Option']
     APopconfirm: typeof import('@arco-design/web-vue')['Popconfirm']

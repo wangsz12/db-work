@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   IconHome,
   IconBook,
@@ -12,14 +12,14 @@ import {
   IconPlusCircle,
   IconPoweroff,
   IconUser,
-  IconCaretDown
+  IconCaretDown,
+  IconBookmark
 } from '@arco-design/web-vue/es/icon'
+import { useUserStore } from '@/store/user'
 
-const router = useRouter();
+const router = useRouter()
 
-const userInfo = reactive({
-  name: 'Test'
-})
+const userInfo = useUserStore()
 let showTitleBar = ref(false)
 let contentTitle = ref('Title')
 
@@ -39,7 +39,7 @@ function logout() {
       <div class="side-bar">
         <menu-item
           text="首页"
-          name="Index"
+          name="index"
           to="/"
         >
           <icon-home size="large" />
@@ -52,24 +52,60 @@ function logout() {
           <div>
             <menu-item
               text="全部图书"
-              name="AllBooks"
+              name="all-books"
               to="/books"
             >
               <icon-book size="large" />
             </menu-item>
             <menu-item
+              text="借出记录"
+              name="lend-records"
+              to="/books/lend/record"
+            >
+              <icon-unordered-list size="large" />
+            </menu-item>
+            <menu-item
               text="借出登记"
-              name="LendRegistration"
-              to="/lend"
+              name="lend-books"
+              to="/books/lend"
             >
               <icon-export size="large" />
             </menu-item>
             <menu-item
+              text="归还记录"
+              name="return-records"
+              to="/books/return/record"
+            >
+              <icon-unordered-list size="large" />
+            </menu-item>
+            <menu-item
               text="归还登记"
-              name="ReturnRegistration"
-              to="/return"
+              name="return-books"
+              to="/books/return"
             >
               <icon-import size="large" />
+            </menu-item>
+          </div>
+        </div>
+        <div class="divider" />
+        <div id="books-manage">
+          <div class="side-bar-title">
+            <span>读者证管理</span>
+          </div>
+          <div>
+            <menu-item
+              text="全部读者证"
+              name="all-cards"
+              to="/cards"
+            >
+              <icon-bookmark size="large" />
+            </menu-item>
+            <menu-item
+              text="新增读者证"
+              name="add-cards"
+              to="/cards/new"
+            >
+              <icon-plus-circle size="large" />
             </menu-item>
           </div>
         </div>
@@ -81,15 +117,15 @@ function logout() {
           <div>
             <menu-item
               text="罚款记录"
-              name="FineRecord"
+              name="all-fines"
               to="/fines"
             >
               <icon-unordered-list size="large" />
             </menu-item>
             <menu-item
               text="缴纳罚款"
-              name="PayFine"
-              to="/pay-fine"
+              name="pay-fine"
+              to="/fines/pay"
             >
               <icon-computer size="large" />
             </menu-item>
@@ -103,15 +139,15 @@ function logout() {
           <div>
             <menu-item
               text="全部出版商"
-              name="AllPublisher"
+              name="all-publishers"
               to="/publishers"
             >
               <icon-printer size="large" />
             </menu-item>
             <menu-item
               text="订购图书"
-              name="PurchaseBooks"
-              to="/purchase"
+              name="purchase"
+              to="/publishers/purchase"
             >
               <icon-plus-circle size="large" />
             </menu-item>
@@ -138,7 +174,10 @@ function logout() {
       <div class="user-box">
         <div class="dropdown-box">
           <div class="info-box">
-            <a-avatar :style="{ backgroundColor: 'rgb(127, 99, 244)' }">
+            <a-avatar
+              :style="{ backgroundColor: 'rgb(127, 99, 244)' }"
+              :size="36"
+            >
               <IconUser />
             </a-avatar>
             <span style="cursor: default;">{{ userInfo.name }}</span>
@@ -170,10 +209,10 @@ function logout() {
       </div>
       <div class="page-box">
         <div class="page">
-          <router-view />
+          <RouterView />
         </div>
         <div class="copyright">
-          <span>2020 &copy; 升华工作室</span>
+          <span>2022 &copy; wangsz12</span>
         </div>
       </div>
     </main>
@@ -273,11 +312,12 @@ function logout() {
       box-shadow: 0 0 .2px .2px rgba(0, 0, 0, 0.1);
 
       .user-box {
+        // height: 100%;
         display: flex;
         align-items: center;
         position: absolute;
         right: 2rem;
-        top: 1rem;
+        top: calc(($header-height - 48px) / 2);
         min-width: 10rem;
 
         .dropdown-box {
@@ -286,13 +326,14 @@ function logout() {
           position: relative;
 
           .info-box {
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding-bottom: .5rem;
 
             span:nth-child(2) {
-              height: 100%;
+              // height: 100%;
               padding-left: .8rem;
               padding-right: .5rem;
               line-height: 1.9rem;
@@ -329,7 +370,7 @@ function logout() {
               .dropdown-content {
                 font-size: .9rem;
                 display: flex;
-                align-content: center;
+                align-items: center;
 
                 span:nth-child(2) {
                   padding-left: 1rem;
@@ -364,7 +405,7 @@ function logout() {
       }
 
       .page-box {
-        width: 100%;
+        // width: 100%;
         padding: 2rem;
 
         .copyright {

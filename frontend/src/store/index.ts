@@ -1,0 +1,10 @@
+import { createPinia, Pinia } from 'pinia'
+import piniaPersist from 'pinia-plugin-persist'
+
+const store: Pinia = createPinia()
+store.use(piniaPersist)
+
+export default store
+
+export { useUserStore } from './user'
+export { useGlobalStore } from './global'

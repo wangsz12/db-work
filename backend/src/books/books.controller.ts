@@ -1,41 +1,66 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ResponseData } from 'src/types';
-import { trueReturn } from 'src/utils';
+import { falseReturn, trueReturn } from 'src/utils';
+import { BooksService } from './books.service';
+import { CreateBooksDto } from './dto/create-books.dto';
 
 @Controller('books')
 export class BooksController {
-  @Get()
-  findAll(@Query('page') page = 1): ResponseData {
-    console.log('page: ', page);
+  constructor(private readonly booksService: BooksService) {}
 
+  @Get()
+  async findAll(@Query('page') page = 1): Promise<ResponseData> {
     return trueReturn({
-      books: Array(10)
-        .fill('')
-        .map((_, index) => ({
-          id: `B${('0000000' + (10 * page + index + 1)).slice(-7)}`,
-          name: '图解HTTP',
-          author: '[日]上野 宣',
-          quantity: 10,
-          category: '计算机/网络',
-          publisher: '人民邮电出版社',
-          isbn: '9798115351531',
-        })),
+      books: await this.booksService.findAll(page),
     });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): ResponseData {
-    return trueReturn({
-      id,
-      name: '图解HTTP',
-      author: '[日]上野 宣',
-      isbn: '9798115351531',
-      price: 75.26,
-    });
+  async findOne(@Param('id') id: string): Promise<ResponseData> {
+    if (!id.startsWith('B')) {
+      return falseReturn(null, 'invalid id');
+    }
+
+    return trueReturn(await this.booksService.findOne(id));
   }
 
-  @Post('purchase')
-  create(@Body() { bookID, quantity }): ResponseData {
-    return trueReturn();
+  @Post()
+  async create(
+    @Body()
+    {
+      publisherID,
+      name,
+      author,
+      quantity,
+      category,
+      isbn,
+      price,
+    }: CreateBooksDto,
+  ) {
+    const res = await this.booksService.create(
+      publisherID,
+      name,
+      author,
+      quantity,
+      category,
+      isbn,
+      price,
+    );
+
+    return res ? trueReturn() : falseReturn();
+  }
+
+  @Patch('purchase')
+  async purchase(@Body() { bookID, quantity }): Promise<ResponseData> {
+    const res = await this.booksService.purchase(bookID, quantity);
+    return res ? trueReturn() : falseReturn();
   }
 }

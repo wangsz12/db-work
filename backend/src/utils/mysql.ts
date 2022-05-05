@@ -7,15 +7,13 @@ const db = createConnection({
   database: 'dbwork',
 });
 
-export function executeSQL(query: string) {
+export function executeSQL(
+  query: string,
+  values?: unknown[],
+): Promise<any> | Promise<any[]> {
   return new Promise((resolve, reject) => {
-    db.query(query, (err, res) => {
-      console.log('err, res: ', err, res);
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
+    db.query(query, values, (err, res) => {
+      err ? reject(err) : resolve(res);
     });
   });
 }

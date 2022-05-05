@@ -1,15 +1,20 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ResponseData } from 'src/types';
-import { trueReturn } from 'src/utils';
+import { falseReturn, trueReturn } from 'src/utils';
+import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
   @Post('login')
-  login(@Body() { account, password }: LoginDto): ResponseData {
-    return trueReturn({
-      name: '王盛泽',
-      // token: '',
-    });
+  async login(@Body() { account, password }: LoginDto): Promise<ResponseData> {
+    const res = await this.authService.login(account, password);
+    return res
+      ? trueReturn({
+          name: res,
+        })
+      : falseReturn(null, '用户名或密码错误');
   }
 }

@@ -44,38 +44,38 @@ export class BooksDao {
     const last = await executeSQL(
       'SELECT id FROM book ORDER BY id DESC LIMIT 1',
     );
-    const id = `B${('000000' + (parseInt(last[0].id.slice(1)) + 1)).slice(-7)}`;
-
-    return id;
+    return `B${('000000' + (parseInt(last[0].id.slice(1)) + 1)).slice(-7)}`;
   }
 
   async create(book: BookEntity): Promise<boolean> {
-    return executeSQL('INSERT INTO book VALUES (?,?,?,?,?,?,?,?)', [
-      book.id,
-      book.publisherID,
-      book.name,
-      book.author,
-      book.quantity,
-      book.category,
-      book.isbn,
-      book.price,
-    ])
-      .then(() => true)
-      .catch((err) => {
-        console.log('err: ', err.sqlMessage);
-        return false;
-      });
+    try {
+      await executeSQL('INSERT INTO book VALUES (?,?,?,?,?,?,?,?)', [
+        book.id,
+        book.publisherID,
+        book.name,
+        book.author,
+        book.quantity,
+        book.category,
+        book.isbn,
+        book.price,
+      ]);
+      return true;
+    } catch (err) {
+      console.log('err: ', err.sqlMessage);
+      return false;
+    }
   }
 
   async update(bookID: string, quantity: number): Promise<boolean> {
-    return executeSQL('UPDATE book SET quantity=quantity+? WHERE id=?', [
-      quantity,
-      bookID,
-    ])
-      .then(() => true)
-      .catch((err) => {
-        console.log('err: ', err.sqlMessage);
-        return false;
-      });
+    try {
+      await executeSQL('UPDATE book SET quantity=quantity+? WHERE id=?', [
+        quantity,
+        bookID,
+      ]);
+      return true;
+    } catch (err) {
+      console.log('err: ', err.sqlMessage);
+      return false;
+    }
   }
 }

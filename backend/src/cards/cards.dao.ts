@@ -30,9 +30,13 @@ export class CardsDao {
       'SELECT card_id FROM reader ORDER BY card_id DESC LIMIT 1',
     );
 
-    return `R${('000000' + (parseInt(last[0].card_id.slice(1)) + 1)).slice(
-      -7,
-    )}`;
+    if (last.length === 0) {
+      return 'R0000001';
+    } else {
+      return `R${('000000' + (parseInt(last[0].card_id.slice(1)) + 1)).slice(
+        -7,
+      )}`;
+    }
   }
 
   async create(card: ReaderCardEntity): Promise<boolean> {

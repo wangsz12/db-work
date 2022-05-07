@@ -1,41 +1,29 @@
 import { Controller, Get } from '@nestjs/common';
 import { ResponseData } from 'src/types';
 import { trueReturn } from 'src/utils';
+import { DataBoxService } from './data-box.service';
 
 @Controller('data-box')
 export class DataBoxController {
+  constructor(private readonly dataBoxService: DataBoxService) {}
+
   @Get('index')
-  findIndexDataBox(): ResponseData {
-    return trueReturn({
-      books: 1564,
-      readers: 745,
-      lend: 545,
-      unpaidFine: 76,
-    });
+  async findIndexDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findIndexDataBox());
   }
 
   @Get('books')
-  findBooksDataBox(): ResponseData {
-    return trueReturn({
-      total: 1536,
-      male: 792,
-      female: 1536 - 792,
-    });
+  async findBooksDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findBooksDataBox());
   }
 
   @Get('cards')
-  findCardsDataBox(): ResponseData {
-    return trueReturn({
-      total: 1536,
-      male: 792,
-      female: 1536 - 792,
-    });
+  async findCardsDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findCardsDataBox());
   }
 
   @Get('publishers')
-  findPublishersDataBox(): ResponseData {
-    return trueReturn({
-      publishers: 52,
-    });
+  async findPublishersDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findPublishersDataBox());
   }
 }

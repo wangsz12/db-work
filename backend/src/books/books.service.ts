@@ -16,7 +16,7 @@ export class BooksService {
   }
 
   async findOne(id: string): Promise<BookEntity> {
-    const res = await this.booksDao.fineOneByID(id);
+    const res = await this.booksDao.findOneByID(id);
 
     return res
       ? new BookEntity(

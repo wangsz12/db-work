@@ -1,3 +1,5 @@
+import { IsInt, IsNumber, IsString, Length, Min } from 'class-validator';
+
 export class BookEntity {
   constructor(
     id: string,
@@ -19,19 +21,29 @@ export class BookEntity {
     this.price = price;
   }
 
+  @IsString()
   id: string;
 
+  @IsString()
   publisherID?: string;
 
+  @IsString()
   name?: string;
 
+  @IsString()
   author?: string;
 
+  @IsInt()
+  @Min(0)
   quantity?: number;
 
+  @IsString()
   category?: string;
 
+  @IsString()
+  @Length(13)
   isbn?: string;
 
+  @IsNumber()
   price?: number;
 }

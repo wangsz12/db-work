@@ -1,28 +1,29 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ResponseData } from 'src/types';
-import { trueReturn } from 'src/utils';
+import { falseReturn, trueReturn } from 'src/utils';
+import { CreatePublisherDto } from './dto/create-publisher.dto';
+import { PublishersService } from './publishers.service';
 
 @Controller('publishers')
 export class PublishersController {
+  constructor(private readonly publishersService: PublishersService) {}
+
   @Get()
-  findAll(@Query('page') page = 1): ResponseData {
-    return trueReturn({
-      total: 52,
-      publishers: Array(10)
-        .fill('')
-        .map((_, index) => ({
-          id: `P${('0000000' + (10 * page + index + 1)).slice(-7)}`,
-          name: '人民邮电出版社',
-          contact: '13012345678',
-          address: 'XX市XX区XX路1号',
-        })),
-    });
+  async findAll(@Query('page') page = 1): Promise<ResponseData> {
+    return trueReturn(await this.publishersService.findAll(page));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): ResponseData {
-    return trueReturn({
-      name: '人民邮电出版社',
-    });
+  async findOne(@Param('id') id: string): Promise<ResponseData> {
+    return trueReturn(await this.publishersService.findOne(id));
+  }
+
+  @Post()
+  async create(
+    @Body() { name, contact, address }: CreatePublisherDto,
+  ): Promise<ResponseData> {
+    const res = await this.publishersService.create(name, contact, address);
+
+    return res ? trueReturn() : falseReturn();
   }
 }

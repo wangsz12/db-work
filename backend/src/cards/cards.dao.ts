@@ -31,9 +31,9 @@ export class CardsDao {
     );
 
     if (last.length === 0) {
-      return 'R0000001';
+      return 'C0000001';
     } else {
-      return `R${('000000' + (parseInt(last[0].card_id.slice(1)) + 1)).slice(
+      return `C${('000000' + (parseInt(last[0].card_id.slice(1)) + 1)).slice(
         -7,
       )}`;
     }

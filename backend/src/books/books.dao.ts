@@ -28,7 +28,7 @@ export class BooksDao {
     return DB2BookEntity(res);
   }
 
-  async fineOneByID(id: string): Promise<BookEntity> {
+  async findOneByID(id: string): Promise<BookEntity> {
     const res = await executeSQL('SELECT * FROM book WHERE id=?', [id]);
 
     return res ? DB2BookEntity(res)[0] : null;
@@ -44,7 +44,12 @@ export class BooksDao {
     const last = await executeSQL(
       'SELECT id FROM book ORDER BY id DESC LIMIT 1',
     );
-    return `B${('000000' + (parseInt(last[0].id.slice(1)) + 1)).slice(-7)}`;
+
+    if (last.length === 0) {
+      return 'B0000001';
+    } else {
+      return `B${('000000' + (parseInt(last[0].id.slice(1)) + 1)).slice(-7)}`;
+    }
   }
 
   async create(book: BookEntity): Promise<boolean> {

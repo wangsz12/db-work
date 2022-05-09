@@ -1,7 +1,8 @@
-import { IsInt, IsString, Min } from 'class-validator';
+import { IsInt, IsString, Length, Min } from 'class-validator';
 
 export class PurchaseBooksDto {
   @IsString()
+  @Length(8)
   readonly bookID: string;
 
   @IsInt()

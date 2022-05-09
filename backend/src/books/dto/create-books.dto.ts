@@ -1,7 +1,8 @@
-import { IsInt, IsNumber, IsString, Min } from 'class-validator';
+import { IsInt, IsNumber, IsString, Length, Min } from 'class-validator';
 
 export class CreateBooksDto {
   @IsString()
+  @Length(5)
   readonly publisherID: string;
 
   @IsString()
@@ -18,6 +19,7 @@ export class CreateBooksDto {
   readonly category: string;
 
   @IsString()
+  @Length(13)
   readonly isbn: string;
 
   @IsNumber()

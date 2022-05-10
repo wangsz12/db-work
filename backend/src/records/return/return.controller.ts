@@ -1,28 +1,53 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { FinesService } from 'src/fines/fines.service';
 import { ResponseData } from 'src/types';
-import { trueReturn } from 'src/utils';
+import { falseReturn, trueReturn } from 'src/utils';
+import { ReturnDto } from './dto/return.dto';
+import { ReturnService } from './return.service';
 
 @Controller('records/return')
 export class ReturnController {
+  constructor(
+    private readonly returnService: ReturnService,
+    private readonly finesService: FinesService,
+  ) {}
+
   @Get()
-  findAll(@Query('page') page = 1): ResponseData {
+  async findAll(@Query('page') page = 1): Promise<ResponseData> {
+    const { total, records } = await this.returnService.findAll(page);
+
     return trueReturn({
-      total: 235,
-      records: Array(10)
-        .fill('')
-        .map((_, index) => ({
-          id: `R${('0000000' + (10 * page + index + 1)).slice(-7)}`,
-          book: {
-            id: 'B000001',
-            name: '图解HTTP',
-            author: '[日]上野 宣',
-          },
-          cardID: '1000001',
-          date: '2022-04-28',
-          isOverdue: Math.random() > 0.5,
-          fine: 3.26,
-          paid: Math.random() > 0.5,
-        })),
+      total,
+      records: records.map(
+        async ({
+          id: ID,
+          lend: { id: lendID, book, cardID, date, duration },
+          isOverdue,
+        }) => {
+          const ddl: Date = new Date(date);
+          ddl.setMonth(ddl.getMonth() + duration);
+          return {
+            id: ID,
+            book,
+            cardID,
+            date,
+            isOverdue,
+            fine: isOverdue
+              ? await this.finesService.findAmountByLendID(lendID)
+              : 0,
+          };
+        },
+      ),
     });
+  }
+
+  @Post()
+  async returnBook(
+    @Body() { lendID, adminID }: ReturnDto,
+  ): Promise<ResponseData> {
+    return this.returnService
+      .returnBook(lendID, adminID)
+      .then((res) => (res ? trueReturn() : falseReturn()))
+      .catch((err: Error) => falseReturn(null, err.message));
   }
 }

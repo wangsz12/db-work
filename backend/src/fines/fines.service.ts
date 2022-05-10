@@ -42,6 +42,16 @@ export class FinesService {
     return await this.finesDao.create(fine);
   }
 
+  calculateFine(from: Date): number {
+    const days: number =
+      (new Date().getTime() - from.getTime()) / (24 * 60 * 60 * 1000);
+    return parseFloat((days * 0.1).toFixed(2));
+  }
+
+  async findAmountByLendID(lendID: string): Promise<number> {
+    return await this.finesDao.findAmountByLendID(lendID);
+  }
+
   async payFine(id: string): Promise<boolean> {
     const fine = await this.finesDao.findOneByID(id);
     if (fine.isPaid) {

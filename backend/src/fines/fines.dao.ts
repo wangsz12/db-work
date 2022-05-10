@@ -137,4 +137,13 @@ export class FinesDao {
         return false;
       });
   }
+
+  async findAmountByLendID(lendID: string): Promise<number> {
+    const res = await executeSQL(
+      'SELECT amount FROM fine_record WHERE lend_id=?',
+      [lendID],
+    );
+
+    return res[0].amount;
+  }
 }

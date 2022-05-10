@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { FinesService } from 'src/fines/fines.service';
 import { ResponseData } from 'src/types';
 import { falseReturn, trueReturn } from 'src/utils';
 import { CreateLendRecordDto } from './dto/create-lend-record.dto';
@@ -6,7 +7,10 @@ import { LendService } from './lend.service';
 
 @Controller('records/lend')
 export class LendController {
-  constructor(private readonly lendService: LendService) {}
+  constructor(
+    private readonly lendService: LendService,
+    private readonly finesService: FinesService,
+  ) {}
 
   @Get()
   async findAll(@Query('page') page = 1): Promise<ResponseData> {
@@ -30,6 +34,9 @@ export class LendController {
       date,
       duration,
     } = await this.lendService.findOneByID(id);
+    const ddl: Date = new Date(date);
+    ddl.setMonth(ddl.getMonth() + duration);
+    const isOverdue = ddl < new Date();
 
     return trueReturn({
       ID,
@@ -38,9 +45,9 @@ export class LendController {
         .slice(0, 10)}`,
       book,
       date,
-      duration: duration,
-      isOverdue: true,
-      fine: 30.26,
+      duration,
+      isOverdue,
+      fine: isOverdue ? await this.finesService.findAmountByLendID(ID) : 0,
     });
   }
 

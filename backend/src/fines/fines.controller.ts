@@ -8,66 +8,68 @@ import {
   Query,
 } from '@nestjs/common';
 import { ResponseData } from 'src/types';
-import { trueReturn } from 'src/utils';
+import { falseReturn, trueReturn } from 'src/utils';
 import { CreateFineDto } from './dto/create-fine.dto';
 import { UpdateFineDto } from './dto/update-fine.dto';
+import { FinesService } from './fines.service';
 
 @Controller('fines')
 export class FinesController {
+  constructor(private readonly finesService: FinesService) {}
+
   @Get()
-  findAll(@Query('page') page = 1): ResponseData {
+  async findAll(@Query('page') page = 1): Promise<ResponseData> {
+    const { total, fines } = await this.finesService.findAll(page);
     return trueReturn({
-      total: 67,
-      fines: Array(10)
-        .fill('')
-        .map((_, index) => ({
-          id: `f${('00000' + (10 * page + index + 1)).slice(-5)}`,
-          cardID: '1000001',
-          bookID: 'b0000001',
-          name: '图解HTTP',
-          author: '[日]上野 宣',
-          amount: 3.27,
-          paid: false,
-        })),
+      total,
+      fines: fines.map((item) => ({
+        id: item.id,
+        cardID: item.lend.cardID,
+        book: item.lend.book,
+        amount: item.amount,
+        paid: item.isPaid,
+      })),
     });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): ResponseData {
+  async findOne(@Param('id') id: string): Promise<ResponseData> {
+    const res = await this.finesService.findOne(id);
+
     return trueReturn({
-      id: 'F00001',
-      record: '图解HTTP / [日]上野 宣 / ￥3.27',
-      book: {
-        id: 'b000001',
-        name: '图解HTTP',
-        author: '[日]上野 宣',
-        isbn: '9798115351531',
-      },
-      fine: 3.27,
+      id: res.id,
+      record: `${res.lend.book.name} / ${res.lend.book.author} / ￥${res.amount}`,
+      book: res.lend.book,
+      fine: res.amount,
     });
   }
 
   @Get('card/:id')
-  findOneByCard(@Param('id') id: string): ResponseData {
+  async findAllByCard(@Param('id') id: string): Promise<ResponseData> {
+    const res = await this.finesService.findAllByCard(id);
     return trueReturn(
-      Array(2)
-        .fill('')
-        .map((_, index) => ({
-          id: `F0000${index}`,
-          record: '图解HTTP / [日]上野 宣 / ￥3.27',
-        })),
+      res.map(({ id, lend, amount }) => ({
+        id: id,
+        record: `${lend.book.name} / ${lend.book.author} / ￥${amount}`,
+      })),
     );
   }
 
   @Post()
-  create(
-    @Body() { cardID, adminID, bookID, amount }: CreateFineDto,
-  ): ResponseData {
-    return trueReturn();
+  async create(
+    @Body() { adminID, lendID, amount }: CreateFineDto,
+  ): Promise<ResponseData> {
+    return this.finesService
+      .create(adminID, lendID, amount)
+      .then(() => trueReturn())
+      .catch((err: Error) => falseReturn(null, err.message));
   }
 
   @Patch()
-  update(@Body() { id }: UpdateFineDto): ResponseData {
-    return trueReturn();
+  async payFine(@Body() { id }: UpdateFineDto): Promise<ResponseData> {
+    return this.finesService
+      .payFine(id)
+      .then(() => trueReturn())
+      .catch((err: Error) => falseReturn(null, err.message));
   }
 }

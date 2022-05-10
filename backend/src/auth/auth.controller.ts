@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ResponseData } from 'src/types';
 import { falseReturn, trueReturn } from 'src/utils';
 import { AuthService } from './auth.service';
@@ -9,12 +9,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
+  @HttpCode(200)
   async login(@Body() { account, password }: LoginDto): Promise<ResponseData> {
     const res = await this.authService.login(account, password);
-    return res
-      ? trueReturn({
-          name: res,
-        })
-      : falseReturn(null, '用户名或密码错误');
+    return res ? trueReturn(res) : falseReturn(null, '用户名或密码错误');
   }
 }

@@ -1,14 +1,13 @@
-import { IsNumber, IsString, Min } from 'class-validator';
+import { IsNumber, IsString, Length, Min } from 'class-validator';
 
 export class CreateFineDto {
   @IsString()
-  readonly cardID: string;
-
-  @IsString()
+  @Length(5)
   readonly adminID: string;
 
   @IsString()
-  readonly bookID: string;
+  @Length(8)
+  readonly lendID: string;
 
   @IsNumber()
   @Min(0)

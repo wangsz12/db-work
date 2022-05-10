@@ -1,9 +1,11 @@
-import { IsString } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 
-export class CreateReturnRecordDto {
+export class ReturnDto {
   @IsString()
-  readonly cardID: string;
+  @Length(5)
+  readonly adminID: string;
 
   @IsString()
+  @Length(8)
   readonly lendID: string;
 }

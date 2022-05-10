@@ -2,10 +2,10 @@ import { IsInt, IsString, Max, Min } from 'class-validator';
 
 export class CreateLendRecordDto {
   @IsString()
-  readonly cardID: string;
+  readonly bookID: string;
 
   @IsString()
-  readonly bookID: string;
+  readonly cardID: string;
 
   @IsInt()
   @Min(1)

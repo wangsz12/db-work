@@ -8,7 +8,7 @@ import { IconPrinter } from "@arco-design/web-vue/es/icon"
 const $message = useMessage()
 
 const dataBox = reactive({
-  publishers: -1
+  total: -1
 })
 
 const columns: TableColumnData[] = withAlignCenter([
@@ -64,7 +64,7 @@ function handleTablePageChange(page: number) {
     >
       <DataBox
         title="出版商总数量"
-        :value="dataBox.publishers"
+        :value="dataBox.total"
       >
         <icon-printer :style="{fontSize: '22px'}" />
       </DataBox>

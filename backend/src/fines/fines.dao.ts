@@ -144,6 +144,6 @@ export class FinesDao {
       [lendID],
     );
 
-    return res[0].amount;
+    return res[0]?.amount ?? -1;
   }
 }

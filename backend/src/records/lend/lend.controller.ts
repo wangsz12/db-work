@@ -16,7 +16,19 @@ export class LendController {
 
   @Get()
   async findAll(@Query('page') page = 1): Promise<ResponseData> {
-    return trueReturn(await this.lendService.findAll(page));
+    const { total, records } = await this.lendService.findAll(page);
+
+    return trueReturn({
+      total,
+      records: records.map((item) => ({
+        ...item,
+        book: {
+          ...item.book,
+          isbn: undefined,
+        },
+        date: dayjs(item.date).format('YYYY-MM-DD'),
+      })),
+    });
   }
 
   @Post()
@@ -38,6 +50,14 @@ export class LendController {
     } = await this.lendService.findOneByID(id);
     const ddl: Dayjs = dayjs(date).add(duration, 'month');
     const isOverdue = ddl < dayjs();
+    let fine = 0;
+
+    if (isOverdue) {
+      fine = await this.finesService.findAmountByLendID(ID);
+      if (fine === -1) {
+        fine = this.finesService.calculateFine(ddl);
+      }
+    }
 
     return trueReturn({
       ID,
@@ -48,13 +68,15 @@ export class LendController {
       date: dayjs(date).format('YYYY-MM-DD'),
       duration,
       isOverdue,
-      fine: isOverdue ? await this.finesService.findAmountByLendID(ID) : 0,
+      fine,
     });
   }
 
   @Get('card/:id')
-  async findOneByCard(@Param('id') id: string): Promise<ResponseData> {
-    const res = await this.lendService.findAllByCard(id);
+  async findAllUnreturnedByCard(
+    @Param('id') id: string,
+  ): Promise<ResponseData> {
+    const res = await this.lendService.findAllUnreturnedByCard(id);
 
     return trueReturn(
       res.map(({ id: ID, book, date }) => ({

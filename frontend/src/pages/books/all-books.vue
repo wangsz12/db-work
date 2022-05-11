@@ -48,13 +48,12 @@ const columns: TableColumnData[] = withAlignCenter([
 const total = ref(0)
 const tableData: TableData[] = reactive([])
 const dataBox = reactive({
-  books: -1,
+  total: -1,
   lend: -1,
   categories: -1
 })
 const loading = ref(true)
 
-// 获取信息
 getBookDataBox()
   .then(({data: res}) => {
     Object.assign(dataBox, res.data)
@@ -89,7 +88,7 @@ function handleTablePageChange(page: number) {
     >
       <DataBox
         title="图书总数量"
-        :value="dataBox.books"
+        :value="dataBox.total"
       >
         <icon-book :style="{fontSize: '22px'}" />
       </DataBox>

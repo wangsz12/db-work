@@ -18,18 +18,36 @@ export class BooksController {
 
   @Get()
   async findAll(@Query('page') page = 1): Promise<ResponseData> {
+    const books = await this.booksService.findAll(page);
+
     return trueReturn({
-      books: await this.booksService.findAll(page),
+      total: await this.booksService.findTotalQuantity(),
+      books: books.map((item) => ({
+        ...item,
+        publisher: item.publisher.name,
+      })),
     });
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ResponseData> {
-    if (!id.startsWith('B')) {
-      return falseReturn(null, 'invalid id');
-    }
+    // if (!id.startsWith('B')) {
+    //   return falseReturn(null, 'invalid id');
+    // }
 
     return trueReturn(await this.booksService.findOne(id));
+  }
+
+  @Get('/publisher/:id')
+  async findAllByPublisher(@Param('id') id: string): Promise<ResponseData> {
+    const res = await this.booksService.findAllByPublisher(id);
+
+    return trueReturn(
+      res.map(({ id, name, author }) => ({
+        id,
+        record: `${name} / ${author}`,
+      })),
+    );
   }
 
   @Post()

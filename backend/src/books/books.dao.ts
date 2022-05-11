@@ -1,13 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { PublisherEntity } from 'src/publishers/entity/publisher.entity';
 import { executeSQL } from 'src/utils/mysql';
 import { BookEntity } from './entity/book.entity';
 
 function DB2BookEntity(result: any[]): BookEntity[] {
   return result.map(
-    ({ id, publisher_id, name, author, quantity, category, ISBN, price }) =>
+    ({
+      id,
+      publisher_id,
+      pname,
+      name,
+      author,
+      quantity,
+      category,
+      ISBN,
+      price,
+    }) =>
       new BookEntity(
         id,
-        publisher_id,
+        new PublisherEntity(publisher_id, pname),
         name,
         author,
         quantity,
@@ -21,9 +32,31 @@ function DB2BookEntity(result: any[]): BookEntity[] {
 @Injectable()
 export class BooksDao {
   async findAll(page: number): Promise<BookEntity[]> {
-    const res = await executeSQL('SELECT * FROM book LIMIT ?,10', [
-      10 * (page - 1),
-    ]);
+    const res = await executeSQL(
+      `
+      SELECT book.*, publisher.name AS pname
+      FROM book, publisher
+      WHERE book.publisher_id = publisher.id
+      ORDER BY book.id
+      LIMIT ?,10
+      `,
+      [10 * (page - 1)],
+    );
+
+    return DB2BookEntity(res);
+  }
+
+  async findTotalQuantity(): Promise<number> {
+    const res = await executeSQL('SELECT COUNT(*) AS res FROM book');
+
+    return res[0].res;
+  }
+
+  async findAllByPublisher(id: string): Promise<BookEntity[]> {
+    const res = await executeSQL(
+      'SELECT * FROM book WHERE publisher_id=? ORDER BY id',
+      [id],
+    );
 
     return DB2BookEntity(res);
   }
@@ -56,7 +89,7 @@ export class BooksDao {
     try {
       await executeSQL('INSERT INTO book VALUES (?,?,?,?,?,?,?,?)', [
         book.id,
-        book.publisherID,
+        book.publisher.id,
         book.name,
         book.author,
         book.quantity,

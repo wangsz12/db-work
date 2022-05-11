@@ -7,10 +7,10 @@ import {
 } from "@arco-design/web-vue/es/icon"
 import { TableColumnData, TableData } from "@arco-design/web-vue"
 import { withAlignCenter } from "@/utils"
-import { getFines } from "@/apis/fines"
+import { getFines, getFinesDataBox } from "@/apis/fines"
 
 const dataBox = reactive({
-  fines: 76,
+  total: 76,
   paid: 50,
   unpaid: 26
 })
@@ -29,16 +29,16 @@ const columns: TableColumnData[] = withAlignCenter([
   },
   {
     title: '所借图书编号',
-    dataIndex: 'bookID',
+    dataIndex: 'book.id',
     width: 140
   },
   {
     title: '所借图书名称',
-    dataIndex: 'name',
+    dataIndex: 'book.name',
   },
   {
     title: '所借图书作者',
-    dataIndex: 'author',
+    dataIndex: 'book.author',
   },
   {
     title: '罚款金额',
@@ -54,6 +54,11 @@ const columns: TableColumnData[] = withAlignCenter([
   }
 ])
 const tableData: TableData[] = reactive([])
+
+getFinesDataBox()
+  .then(({data: res}) => {
+    Object.assign(dataBox, res.data)
+  })
 
 getFines()
   .then(({data: res}) => {
@@ -80,7 +85,7 @@ function handleTablePageChange(page: number) {
     >
       <DataBox
         title="罚款记录总数"
-        :value="dataBox.fines"
+        :value="dataBox.total"
       >
         <icon-computer :style="{fontSize: '22px'}" />
       </DataBox>
@@ -115,7 +120,7 @@ function handleTablePageChange(page: number) {
           <span> {{ record.amount }}元 </span>
         </template>
         <template #paid="{ record }">
-          <span :style="`color: ${record.status === '归还' ? '#0de20d' : '#fc243a'}`">
+          <span :style="`${record.paid ? '' : 'color: #fc243a'}`">
             {{ record.paid ? '是' : '否' }}
           </span>
         </template>

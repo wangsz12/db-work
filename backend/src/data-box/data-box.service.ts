@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataBoxDao } from './data-box.dao';
 import { BooksDto } from './dto/books.dto';
 import { CardsDto } from './dto/cards.dto';
+import { FinesDto } from './dto/fines.dto';
 import { IndexDto } from './dto/index.dto';
 import { PublishersDto } from './dto/publishers.dto';
 
@@ -34,6 +35,17 @@ export class DataBoxService {
       total,
       male,
       female: total - male,
+    };
+  }
+
+  async findFinesDataBox(): Promise<FinesDto> {
+    const total: number = await this.dataBoxDao.findFinesQuantity();
+    const unpaid: number = await this.dataBoxDao.findUnpaidQuantity();
+
+    return {
+      total,
+      paid: total - unpaid,
+      unpaid,
     };
   }
 

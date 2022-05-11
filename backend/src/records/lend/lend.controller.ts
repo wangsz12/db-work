@@ -4,6 +4,8 @@ import { ResponseData } from 'src/types';
 import { falseReturn, trueReturn } from 'src/utils';
 import { CreateLendRecordDto } from './dto/create-lend-record.dto';
 import { LendService } from './lend.service';
+import * as dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
 
 @Controller('records/lend')
 export class LendController {
@@ -34,17 +36,16 @@ export class LendController {
       date,
       duration,
     } = await this.lendService.findOneByID(id);
-    const ddl: Date = new Date(date);
-    ddl.setMonth(ddl.getMonth() + duration);
-    const isOverdue = ddl < new Date();
+    const ddl: Dayjs = dayjs(date).add(duration, 'month');
+    const isOverdue = ddl < dayjs();
 
     return trueReturn({
       ID,
-      record: `${book.name} / ${book.author} / ${date
-        .toISOString()
-        .slice(0, 10)}`,
+      record: `${book.name} / ${book.author} / ${dayjs(date).format(
+        'YYYY-MM-DD',
+      )}`,
       book,
-      date,
+      date: dayjs(date).format('YYYY-MM-DD'),
       duration,
       isOverdue,
       fine: isOverdue ? await this.finesService.findAmountByLendID(ID) : 0,
@@ -58,9 +59,9 @@ export class LendController {
     return trueReturn(
       res.map(({ id: ID, book, date }) => ({
         id: ID,
-        record: `${book.name} / ${book.author} / ${date
-          .toISOString()
-          .slice(0, 10)}`,
+        record: `${book.name} / ${book.author} / ${dayjs(date).format(
+          'YYYY-MM-DD',
+        )}`,
       })),
     );
   }

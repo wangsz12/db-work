@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import * as dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { FindAllDto } from './dto/find-all.dto';
 import { FineEntity } from './entity/fine.entity';
 import { FinesDao } from './fines.dao';
@@ -42,9 +44,8 @@ export class FinesService {
     return await this.finesDao.create(fine);
   }
 
-  calculateFine(from: Date): number {
-    const days: number =
-      (new Date().getTime() - from.getTime()) / (24 * 60 * 60 * 1000);
+  calculateFine(from: Dayjs): number {
+    const days: number = dayjs().diff(dayjs(from), 'day');
     return parseFloat((days * 0.1).toFixed(2));
   }
 

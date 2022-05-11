@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import * as dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { FinesService } from 'src/fines/fines.service';
 import { LendDao } from '../lend/lend.dao';
 import { FindAllDto } from './dto/find-all.dto';
@@ -29,9 +31,9 @@ export class ReturnService {
       await this.lendDao.updateIsReturned(lendID);
 
       const id: string = await this.returnDao.findNextID();
-      const ddl: Date = lend.date;
-      ddl.setMonth(ddl.getMonth() + lend.duration);
-      const isOverdue: boolean = ddl < new Date();
+
+      const ddl: Dayjs = dayjs(lend.date).add(lend.duration, 'month');
+      const isOverdue: boolean = ddl < dayjs();
 
       if (isOverdue) {
         await this.finesService.create(
@@ -44,7 +46,7 @@ export class ReturnService {
       await this.returnDao.create(id, lendID, isOverdue);
       return true;
     } catch (err) {
-      return false;
+      throw err;
     }
   }
 }

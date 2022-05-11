@@ -1,8 +1,8 @@
-import { IsBoolean, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsString, Length } from 'class-validator';
 import { LendRecordEntity } from 'src/records/lend/entity/lend-record.entity';
 
 export class ReturnRecordEntity {
-  constructor(id: string, lend: LendRecordEntity, isOverdue: boolean) {
+  constructor(id: string, lend?: LendRecordEntity, isOverdue?: boolean) {
     this.id = id;
     this.lend = lend;
     this.isOverdue = isOverdue;
@@ -12,8 +12,11 @@ export class ReturnRecordEntity {
   @Length(8)
   id: string;
 
-  lend: LendRecordEntity;
+  lend?: LendRecordEntity;
+
+  @IsDate()
+  date: Date;
 
   @IsBoolean()
-  isOverdue: boolean;
+  isOverdue?: boolean;
 }

@@ -96,7 +96,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'purchase',
-        name: 'purchase-book',
+        name: 'purchase',
         component: () => import('@/pages/publishers/purchase-book.vue')
       }
     ]

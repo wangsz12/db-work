@@ -27,7 +27,7 @@ export class LendService {
     return await this.lendDao.findOneByID(id);
   }
 
-  async findAllByCard(id: string): Promise<LendRecordEntity[]> {
-    return await this.lendDao.findAllByCard(id);
+  async findAllUnreturnedByCard(id: string): Promise<LendRecordEntity[]> {
+    return await this.lendDao.findAllUnreturnedByCard(id);
   }
 }

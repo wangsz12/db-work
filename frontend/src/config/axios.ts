@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import { useRouter } from "vue-router"
 
 const Axios = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '',
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '',
   timeout: 10000
 })
 
@@ -22,12 +22,8 @@ Axios.interceptors.request.use(
 
 Axios.interceptors.response.use(
   (res: AxiosResponse) => {
-    if (res.headers.Authorization) {
-      localStorage.setItem('token', res.headers.Authorization)
-    }
-  
-    if (res.data.status !== true) {
-      return Promise.reject(res)
+    if (res.data.status === false) {
+      return Promise.reject(new Error(res.data.msg))
     }
   
     return res

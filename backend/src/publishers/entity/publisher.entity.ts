@@ -1,7 +1,7 @@
 import { IsString, Length } from 'class-validator';
 
 export class PublisherEntity {
-  constructor(id: string, name: string, contact: string, address: string) {
+  constructor(id: string, name?: string, contact?: string, address?: string) {
     this.id = id;
     this.name = name;
     this.contact = contact;

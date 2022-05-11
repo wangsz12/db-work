@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PublisherEntity } from 'src/publishers/entity/publisher.entity';
 import { BooksDao } from './books.dao';
 import { BookEntity } from './entity/book.entity';
 
@@ -7,12 +8,15 @@ export class BooksService {
   constructor(private readonly booksDao: BooksDao) {}
 
   async findAll(page: number): Promise<BookEntity[]> {
-    const res = await this.booksDao.findAll(page);
+    return await this.booksDao.findAll(page);
+  }
 
-    return res.map(
-      ({ id, name, author, quantity, category, isbn }) =>
-        new BookEntity(id, undefined, name, author, quantity, category, isbn),
-    );
+  async findTotalQuantity(): Promise<number> {
+    return await this.booksDao.findTotalQuantity();
+  }
+
+  async findAllByPublisher(id: string): Promise<BookEntity[]> {
+    return await this.booksDao.findAllByPublisher(id);
   }
 
   async findOne(id: string): Promise<BookEntity> {
@@ -44,7 +48,7 @@ export class BooksService {
     const id = await this.booksDao.findNextID();
     const book = new BookEntity(
       id,
-      publisherID,
+      new PublisherEntity(publisherID),
       name,
       author,
       quantity,

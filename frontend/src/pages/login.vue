@@ -1,35 +1,26 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-// import { APIResult } from '@/config/types'
+import { login } from '@/apis/auth'
 import {
   IconUser,
   IconUnlock
 } from '@arco-design/web-vue/es/icon'
 import { useMessage } from '@/utils'
+import { useStore } from '@/store'
 
 const router = useRouter()
 const $message = useMessage()
-
-interface Credentials {
-  username: string,
-  password: string
-}
+const userInfo = useStore()
 
 let credentials = reactive({
-  username: '',
+  account: '',
   password: ''
 })
 let logining = ref(false)
 
-function login(credentials: Credentials) {
-  console.log('credentials: ', credentials)
-  localStorage.setItem('token', 'token')
-  return Promise.resolve()
-}
-
 function loginBtnHdl() {
-  if (credentials.username === '') {
+  if (credentials.account === '') {
     $message.error('请输入用户名')
     return
   }
@@ -39,8 +30,14 @@ function loginBtnHdl() {
   }
 
   logining.value = true
-  login(credentials)
-    .then(() => {
+  login(credentials.account, credentials.password)
+    .then(({data: res}) => {
+      const { id, name, token } = res.data
+      localStorage.setItem('token', token)
+
+      userInfo.setID(id)
+      userInfo.setName(name)
+
       $message.success('登录成功')
       router.push('/')
     })
@@ -69,7 +66,7 @@ function loginBtnHdl() {
         </div>
         <div class="input-box">
           <input
-            v-model="credentials.username"
+            v-model="credentials.account"
             type="text"
             required
             class="input"

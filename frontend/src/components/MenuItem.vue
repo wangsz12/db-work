@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGlobalStore } from '@/store'
+import { useStore } from '@/store'
 import { useMessage } from '@/utils'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits(['click'])
 
 const router = useRouter()
-const global = useGlobalStore()
+const global = useStore()
 const $message = useMessage()
 
 let isSelected = ref(props.name === global.selectedItemName)

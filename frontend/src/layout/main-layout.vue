@@ -15,11 +15,11 @@ import {
   IconCaretDown,
   IconBookmark
 } from '@arco-design/web-vue/es/icon'
-import { useUserStore } from '@/store/user'
+import { useStore } from '@/store'
 
 const router = useRouter()
 
-const userInfo = useUserStore()
+const userInfo = useStore()
 let showTitleBar = ref(false)
 let contentTitle = ref('Title')
 
@@ -184,11 +184,11 @@ function logout() {
             <icon-caret-down size="large" />
           </div>
           <div class="dropdown">
-            <div class="dropdown-item">
-              <div
-                class="dropdown-content"
-                @click="logout"
-              >
+            <div
+              class="dropdown-item"
+              @click="logout"
+            >
+              <div class="dropdown-content">
                 <icon-poweroff size="large" />
                 <span>退出登录</span>
               </div>

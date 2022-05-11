@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from '@/store'
+import { useStore } from '@/store'
 import dayjs from 'dayjs'
 import {
   IconBook,
@@ -11,7 +11,7 @@ import { reactive, ref } from 'vue'
 import { TableColumnData, TableData } from '@arco-design/web-vue'
 import { withAlignCenter } from '@/utils'
 import { getRecentRecord } from '@/apis/book'
-import { getIndexDataBox } from '@/apis/other'
+import { getIndexDataBox } from '@/apis/data-box'
 
 let greeting = (() => {
   const hour = dayjs().hour()
@@ -22,7 +22,7 @@ let greeting = (() => {
   if (hour >= 18 || hour < 6) return '晚上好'
 })()
 
-const userInfo = useUserStore()
+const userInfo = useStore()
 
 const columns: TableColumnData[] = withAlignCenter([
   {

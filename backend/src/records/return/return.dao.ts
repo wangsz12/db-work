@@ -71,7 +71,7 @@ export class ReturnDao {
     isOverdue: boolean,
   ): Promise<boolean> {
     try {
-      await executeSQL('INSERT INTO return_record VALUES (?,?,?)', [
+      await executeSQL('INSERT INTO return_record VALUES (?,?,NOW(),?)', [
         id,
         lendID,
         isOverdue,

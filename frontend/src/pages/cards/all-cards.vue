@@ -21,7 +21,8 @@ const columns: TableColumnData[] = withAlignCenter([
   {
     title: '性别',
     dataIndex: 'gender',
-    width: 150
+    width: 150,
+    slotName: 'gender'
   },
   {
     title: '联系方式',
@@ -33,7 +34,7 @@ const columns: TableColumnData[] = withAlignCenter([
     dataIndex: 'address'
   },
   {
-    title: '借阅书籍数量',
+    title: '共借阅书籍数量',
     dataIndex: 'haveLent',
     width: 150
   },
@@ -124,6 +125,9 @@ function deleteCard(id: string) {
         page-position="bottom"
         @page-change="handleTablePageChange"
       >
+        <template #gender="{ record }">
+          <span> {{ record.gender ? '女' : '男' }} </span>
+        </template>
         <template #operation="{ record }">
           <a-popconfirm
             content="确定要删除吗？"

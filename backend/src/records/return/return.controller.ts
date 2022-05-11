@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import * as dayjs from 'dayjs';
 import { FinesService } from 'src/fines/fines.service';
 import { ResponseData } from 'src/types';
 import { falseReturn, trueReturn } from 'src/utils';
@@ -18,25 +19,23 @@ export class ReturnController {
 
     return trueReturn({
       total,
-      records: records.map(
-        async ({
-          id: ID,
-          lend: { id: lendID, book, cardID, date, duration },
-          isOverdue,
-        }) => {
-          const ddl: Date = new Date(date);
-          ddl.setMonth(ddl.getMonth() + duration);
-          return {
+      records: await Promise.all(
+        records.map(
+          async ({
+            id: ID,
+            lend: { id: lendID, book, cardID, date },
+            isOverdue,
+          }) => ({
             id: ID,
             book,
             cardID,
-            date,
+            date: dayjs(date).format('YYYY-MM-DD'),
             isOverdue,
             fine: isOverdue
               ? await this.finesService.findAmountByLendID(lendID)
               : 0,
-          };
-        },
+          }),
+        ),
       ),
     });
   }
@@ -45,9 +44,13 @@ export class ReturnController {
   async returnBook(
     @Body() { lendID, adminID }: ReturnDto,
   ): Promise<ResponseData> {
-    return this.returnService
-      .returnBook(lendID, adminID)
-      .then((res) => (res ? trueReturn() : falseReturn()))
-      .catch((err: Error) => falseReturn(null, err.message));
+    try {
+      return this.returnService
+        .returnBook(lendID, adminID)
+        .then((res) => (res ? trueReturn() : falseReturn()))
+        .catch((err: Error) => falseReturn(null, err.message));
+    } catch (err) {
+      return falseReturn(null, err.message);
+    }
   }
 }

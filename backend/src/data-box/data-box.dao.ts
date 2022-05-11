@@ -17,8 +17,14 @@ export class DataBoxDao {
 
   async findLendsQuantity(): Promise<number> {
     const res = await executeSQL(
-      'SELECT COUNT(*) AS res FROM borrow_record WHERE is_returned=0',
+      'SELECT COUNT(*) AS res FROM lend_record WHERE is_returned=0',
     );
+
+    return res[0].res;
+  }
+
+  async findFinesQuantity(): Promise<number> {
+    const res = await executeSQL('SELECT COUNT(*) AS res FROM fine_record');
 
     return res[0].res;
   }

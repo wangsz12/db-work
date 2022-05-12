@@ -13,7 +13,9 @@ import {
   IconPoweroff,
   IconUser,
   IconCaretDown,
-  IconBookmark
+  IconBookmark,
+  IconSubscribeAdd,
+  IconLayers
 } from '@arco-design/web-vue/es/icon'
 import { useStore } from '@/store'
 
@@ -24,6 +26,7 @@ let showTitleBar = ref(false)
 let contentTitle = ref('Title')
 
 function logout() {
+  localStorage.removeItem('token')
   router.push('/login')
 }
 </script>
@@ -56,6 +59,13 @@ function logout() {
               to="/books"
             >
               <icon-book size="large" />
+            </menu-item>
+            <menu-item
+              text="录入图书信息"
+              name="new-book"
+              to="/books/new"
+            >
+              <icon-layers size="large" />
             </menu-item>
             <menu-item
               text="借出记录"
@@ -102,7 +112,7 @@ function logout() {
             </menu-item>
             <menu-item
               text="新增读者证"
-              name="add-cards"
+              name="new-card"
               to="/cards/new"
             >
               <icon-plus-circle size="large" />
@@ -138,18 +148,25 @@ function logout() {
           </div>
           <div>
             <menu-item
-              text="全部出版商"
+              text="全部出版社"
               name="all-publishers"
               to="/publishers"
             >
               <icon-printer size="large" />
             </menu-item>
             <menu-item
+              text="新增出版社"
+              name="new-publisher"
+              to="/publishers/new"
+            >
+              <icon-plus-circle size="large" />
+            </menu-item>
+            <menu-item
               text="订购图书"
               name="purchase"
               to="/publishers/purchase"
             >
-              <icon-plus-circle size="large" />
+              <icon-subscribe-add size="large" />
             </menu-item>
           </div>
         </div>
@@ -271,9 +288,24 @@ function logout() {
       z-index: 999;
       box-shadow: 0 0 .2px .2px rgba(0, 0, 0, 0.1);
 
-      &::-webkit-scrollbar-track,
-      &::-webkit-scrollbar,
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 3px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0.08);
+      }
+
       &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: rgba(0, 0, 0, 0.15);
+        transition: all .2s;
+        height: 20px;
+      }
+
+      &::-webkit-scrollbar-button,
+      &::-webkit-scrollbar-corner {
         display: none;
       }
 

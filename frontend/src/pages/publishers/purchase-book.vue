@@ -67,7 +67,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
   purchase(values)
     .then(() => {
       $message.success('订购成功')
-      router.push('/publishers')
+      router.push('/books')
     })
 }
 </script>

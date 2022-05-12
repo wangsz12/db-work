@@ -63,6 +63,21 @@ export interface BookListItem {
   price: number
 }
 
+export interface CreateBookRequest {
+  name: string,
+  author: string,
+  category: string;
+  isbn: string;
+  publisherID: string;
+  price: number;
+}
+
+export interface CreatePublisherRequest {
+  name: string;
+  contact: string;
+  address: string;
+}
+
 export interface PurchaseRequest {
   bookID: string,
   quantity: number

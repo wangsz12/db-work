@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getPublisherByPage, getPublisherDataBox } from '@/apis/publishers'
+import { deletePublisherByID, getPublisherByPage, getPublisherDataBox } from '@/apis/publishers'
 import { useMessage, withAlignCenter } from '@/utils'
 import { TableColumnData, TableData } from '@arco-design/web-vue'
 import { reactive, ref } from 'vue'
@@ -28,6 +28,11 @@ const columns: TableColumnData[] = withAlignCenter([
   {
     title: '地址',
     dataIndex: 'address'
+  },
+  {
+    title: '操作',
+    slotName: 'operation',
+    width: 100
   }
 ])
 const tableData: TableData[] = reactive([])
@@ -52,6 +57,19 @@ function handleTablePageChange(page: number) {
     })
     .catch(() => {
       $message.error('网络错误')
+    })
+}
+
+function deletePublisher(id: string) {
+  deletePublisherByID(id)
+    .then(() => {
+      $message.success('删除成功')
+      getPublisherByPage()
+        .then(({data: res}) => {
+          total.value = res.data.total
+          tableData.length = 0
+          tableData.push(...res.data.publishers)
+        })
     })
 }
 </script>
@@ -82,7 +100,22 @@ function handleTablePageChange(page: number) {
         }"
         page-position="bottom"
         @page-change="handleTablePageChange"
-      />
+      >
+        <template #operation="{ record }">
+          <a-popconfirm
+            content="确定要删除吗？"
+            @ok="deletePublisher(record.id)"
+          >
+            <a-button
+              type="primary"
+              size="mini"
+              status="danger"
+            >
+              删除
+            </a-button>
+          </a-popconfirm>
+        </template>
+      </a-table>
     </div>
   </div>
 </template>

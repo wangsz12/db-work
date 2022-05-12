@@ -1,19 +1,5 @@
 import Axios from "@/config/axios"
-import { mockAPIReturn } from "@/utils"
-import { PurchaseRequest } from "@/utils/types"
-
-// TODO 替换为真实接口
-export function getRecentRecord() {
-  return mockAPIReturn(Array(10).fill('').map((_, index) => ({
-    key: String(index),
-    status: '借出',
-    cardID: '1000001',
-    name: '图解HTTP',
-    author: '[日]上野 宣',
-    deadline: '2022-05-26',
-    isOverdue: false
-  })))
-}
+import { CreateBookRequest, PurchaseRequest } from "@/utils/types"
 
 export function getBookDataBox() {
   return Axios.get('/data-box/books')
@@ -61,6 +47,17 @@ export function getBooksByPublisher(pid: string) {
   //   id: `B${('0000000' + (index + 1)).slice(-7)}`,
   //   record: '图解HTTP / [日]上野 宣'
   // })))
+}
+
+export function createBook({ name, author, category, isbn, publisherID, price }: CreateBookRequest) {
+  return Axios.post('/books', {
+    name,
+    author,
+    category,
+    isbn,
+    publisherID,
+    price
+  })
 }
 
 export function purchase({ bookID, quantity }: PurchaseRequest) {

@@ -1,4 +1,5 @@
 import Axios from "@/config/axios"
+import { CreatePublisherRequest } from "@/utils/types"
 
 export function getPublisherDataBox() {
   return Axios.get('/data-box/publishers')
@@ -29,4 +30,20 @@ export function getPublisherByID(id: string) {
   // return mockAPIReturn({
   //   name: '人民邮电出版社'
   // })
+}
+
+export function createPublisher({ name, contact, address }: CreatePublisherRequest) {
+  return Axios.post('/publishers', {
+    name,
+    contact,
+    address
+  })
+}
+
+export function deletePublisherByID(id: string) {
+  return Axios.delete('/publishers', {
+    params: {
+      id
+    }
+  })
 }

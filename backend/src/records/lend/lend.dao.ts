@@ -43,7 +43,7 @@ export class LendDao {
       SELECT lend_record.*,book.name,book.author,book.ISBN
       FROM lend_record,book
       WHERE lend_record.book_id=book.id
-      ORDER BY lend_record.id
+      ORDER BY lend_record.id DESC
       LIMIT ?,10
       `,
       [10 * (page - 1)],

@@ -29,6 +29,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/books/all-books.vue')
       },
       {
+        path: 'new',
+        name: 'new-book',
+        component: () => import('@/pages/books/new-book.vue')
+      },
+      {
         path: 'lend/record',
         name: 'lend-records',
         component: () => import('@/pages/books/lend-record.vue')
@@ -93,6 +98,11 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'all-publishers',
         component: () => import('@/pages/publishers/all-publishers.vue')
+      },
+      {
+        path: 'new',
+        name: 'new-publisher',
+        component: () => import('@/pages/publishers/new-publisher.vue')
       },
       {
         path: 'purchase',

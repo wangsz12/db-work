@@ -53,21 +53,12 @@ export class BooksController {
   @Post()
   async create(
     @Body()
-    {
-      publisherID,
-      name,
-      author,
-      quantity,
-      category,
-      isbn,
-      price,
-    }: CreateBooksDto,
+    { publisherID, name, author, category, isbn, price }: CreateBooksDto,
   ) {
     const res = await this.booksService.create(
       publisherID,
       name,
       author,
-      quantity,
       category,
       isbn,
       price,

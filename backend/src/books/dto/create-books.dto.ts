@@ -1,4 +1,4 @@
-import { IsInt, IsNumber, IsString, Length, Min } from 'class-validator';
+import { IsNumber, IsString, Length, Min } from 'class-validator';
 
 export class CreateBooksDto {
   @IsString()
@@ -10,10 +10,6 @@ export class CreateBooksDto {
 
   @IsString()
   readonly author: string;
-
-  @IsInt()
-  @Min(0)
-  readonly quantity: number;
 
   @IsString()
   readonly category: string;

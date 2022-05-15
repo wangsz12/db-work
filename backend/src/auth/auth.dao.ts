@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { executeSQL } from 'src/utils/mysql';
-import { AdminEntity } from './entity/admin.entity';
+import { AdminEntity } from '../admin/entity/admin.entity';
 
 function DB2AdminEntity(result: any[]): AdminEntity[] {
   return result.map(({ id, name }) => new AdminEntity(id, name));

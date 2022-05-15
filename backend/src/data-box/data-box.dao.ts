@@ -58,4 +58,10 @@ export class DataBoxDao {
 
     return res[0].res;
   }
+
+  async findAdminQuantity(): Promise<number> {
+    const res = await executeSQL('SELECT COUNT(*) AS res FROM admin');
+
+    return res[0].res;
+  }
 }

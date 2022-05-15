@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataBoxDao } from './data-box.dao';
+import { AdminDto } from './dto/admin.dto';
 import { BooksDto } from './dto/books.dto';
 import { CardsDto } from './dto/cards.dto';
 import { FinesDto } from './dto/fines.dto';
@@ -52,6 +53,12 @@ export class DataBoxService {
   async findPublishersDataBox(): Promise<PublishersDto> {
     return {
       total: await this.dataBoxDao.findPublisherQuantity(),
+    };
+  }
+
+  async findAdminDataBox(): Promise<AdminDto> {
+    return {
+      total: await this.dataBoxDao.findAdminQuantity(),
     };
   }
 }

@@ -31,4 +31,9 @@ export class DataBoxController {
   async findPublishersDataBox(): Promise<ResponseData> {
     return trueReturn(await this.dataBoxService.findPublishersDataBox());
   }
+
+  @Get('admin')
+  async findAdminDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findAdminDataBox());
+  }
 }

@@ -37,4 +37,8 @@ export class PublishersService {
 
     return await this.publisherDao.create(publisher);
   }
+
+  async delete(id: string): Promise<boolean> {
+    return await this.publisherDao.delete(id);
+  }
 }

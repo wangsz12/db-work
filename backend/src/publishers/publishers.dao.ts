@@ -56,4 +56,14 @@ export class PublishersDao {
       return false;
     }
   }
+
+  async delete(id: string): Promise<boolean> {
+    try {
+      await executeSQL('DELETE FROM publisher WHERE id=?', [id]);
+      return true;
+    } catch (err) {
+      console.log(err.sqlMessage);
+      return false;
+    }
+  }
 }

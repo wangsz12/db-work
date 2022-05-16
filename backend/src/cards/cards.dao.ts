@@ -4,8 +4,8 @@ import { ReaderCardEntity } from './entity/reader-card.entity';
 
 function DB2ReaderCardEntity(result: any[]): ReaderCardEntity[] {
   return result.map(
-    ({ id, name, gender, contact, address }) =>
-      new ReaderCardEntity(id, name, gender, contact, address),
+    ({ card_id, name, gender, contact, address }) =>
+      new ReaderCardEntity(card_id, name, gender, contact, address),
   );
 }
 
@@ -17,6 +17,15 @@ export class CardsDao {
     ]);
 
     return DB2ReaderCardEntity(res);
+  }
+
+  async findBorrowQuantity(cardID: string): Promise<number> {
+    const res = await executeSQL(
+      'SELECT COUNT(*) AS res FROM lend_record WHERE lend_record.card_id=?',
+      [cardID],
+    );
+
+    return res[0].res;
   }
 
   async findTotalQuantity(): Promise<number> {

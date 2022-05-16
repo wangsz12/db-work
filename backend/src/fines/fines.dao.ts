@@ -51,6 +51,7 @@ export class FinesDao {
       SELECT fine_record.*, lend_record.book_id, lend_record.card_id, book.name, book.author, book.ISBN
       FROM fine_record, lend_record, book
       WHERE fine_record.lend_id = lend_record.id AND lend_record.book_id = book.id
+      ORDER BY fine_record.id DESC
       LIMIT ?,10
       `,
       [10 * (page - 1)],
@@ -144,6 +145,6 @@ export class FinesDao {
       [lendID],
     );
 
-    return res[0].amount;
+    return res[0]?.amount ?? -1;
   }
 }

@@ -39,7 +39,7 @@ export class ReturnDao {
       SELECT return_record.*, lend_record.book_id, lend_record.card_id, lend_record.date, lend_record.duration, book.name, book.author
       FROM return_record, lend_record, book
       WHERE return_record.lend_id = lend_record.id AND lend_record.book_id = book.id
-      ORDER BY id
+      ORDER BY id DESC
       LIMIT ?,10
       `,
       [10 * (page - 1)],

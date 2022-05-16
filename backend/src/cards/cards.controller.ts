@@ -12,7 +12,14 @@ export class CardsController {
   async findAll(@Query('page') page = 1): Promise<ResponseData> {
     return trueReturn({
       total: await this.cardsService.findTotalQuantity(),
-      cards: await this.cardsService.findAll(page),
+      cards: await Promise.all(
+        (
+          await this.cardsService.findAll(page)
+        ).map(async (item) => ({
+          ...item,
+          haveLent: await this.cardsService.findBorrowQuantity(item.id),
+        })),
+      ),
     });
   }
 

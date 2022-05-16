@@ -1,9 +1,10 @@
 import { IsInt, IsNumber, IsString, Length, Min } from 'class-validator';
+import { PublisherEntity } from 'src/publishers/entity/publisher.entity';
 
 export class BookEntity {
   constructor(
     id: string,
-    pid?: string,
+    publisher?: PublisherEntity,
     name?: string,
     author?: string,
     quantity?: number,
@@ -12,7 +13,7 @@ export class BookEntity {
     price?: number,
   ) {
     this.id = id;
-    this.publisherID = pid;
+    this.publisher = publisher;
     this.name = name;
     this.author = author;
     this.quantity = quantity;
@@ -24,8 +25,7 @@ export class BookEntity {
   @IsString()
   id: string;
 
-  @IsString()
-  publisherID?: string;
+  publisher?: PublisherEntity;
 
   @IsString()
   name?: string;

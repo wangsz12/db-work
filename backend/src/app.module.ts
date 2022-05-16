@@ -6,6 +6,7 @@ import { DataBoxModule } from './data-box/data-box.module';
 import { FinesModule } from './fines/fines.module';
 import { PublishersModule } from './publishers/publishers.module';
 import { RecordsModule } from './records/records.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RecordsModule } from './records/records.module';
     FinesModule,
     PublishersModule,
     RecordsModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [],

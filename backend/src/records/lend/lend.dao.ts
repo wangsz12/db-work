@@ -43,11 +43,11 @@ export class LendDao {
       SELECT lend_record.*,book.name,book.author,book.ISBN
       FROM lend_record,book
       WHERE lend_record.book_id=book.id
+      ORDER BY lend_record.id DESC
       LIMIT ?,10
       `,
       [10 * (page - 1)],
     );
-    console.log('res: ', res);
 
     return DB2LendRecordEntity(res);
   }
@@ -102,12 +102,12 @@ export class LendDao {
     return DB2LendRecordEntity(res)[0];
   }
 
-  async findAllByCard(id: string): Promise<LendRecordEntity[]> {
+  async findAllUnreturnedByCard(id: string): Promise<LendRecordEntity[]> {
     const res = await executeSQL(
       `
-      SELECT lend_record.id, lend_record.date, lend_record.book_id, book.name, book.author
+      SELECT lend_record.id, lend_record.date, lend_record.book_id, book.name, book.author, lend_record.is_returned
       FROM lend_record, book
-      WHERE lend_record.card_id=? AND lend_record.book_id=book.id
+      WHERE lend_record.card_id=? AND lend_record.is_returned=0 AND lend_record.book_id=book.id
       ORDER BY lend_record.id
       `,
       [id],

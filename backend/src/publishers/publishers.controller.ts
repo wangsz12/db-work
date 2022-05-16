@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ResponseData } from 'src/types';
 import { falseReturn, trueReturn } from 'src/utils';
 import { CreatePublisherDto } from './dto/create-publisher.dto';
@@ -23,6 +31,13 @@ export class PublishersController {
     @Body() { name, contact, address }: CreatePublisherDto,
   ): Promise<ResponseData> {
     const res = await this.publishersService.create(name, contact, address);
+
+    return res ? trueReturn() : falseReturn();
+  }
+
+  @Delete()
+  async delete(@Query('id') id: string): Promise<ResponseData> {
+    const res = await this.publishersService.delete(id);
 
     return res ? trueReturn() : falseReturn();
   }

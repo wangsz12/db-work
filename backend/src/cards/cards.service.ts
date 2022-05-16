@@ -10,6 +10,10 @@ export class CardsService {
     return this.cardsDao.findAll(page);
   }
 
+  async findBorrowQuantity(cardID: string): Promise<number> {
+    return this.cardsDao.findBorrowQuantity(cardID);
+  }
+
   async findTotalQuantity(): Promise<number> {
     return this.cardsDao.findTotalQuantity();
   }

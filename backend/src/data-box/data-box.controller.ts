@@ -22,8 +22,18 @@ export class DataBoxController {
     return trueReturn(await this.dataBoxService.findCardsDataBox());
   }
 
+  @Get('fines')
+  async findFinesDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findFinesDataBox());
+  }
+
   @Get('publishers')
   async findPublishersDataBox(): Promise<ResponseData> {
     return trueReturn(await this.dataBoxService.findPublishersDataBox());
+  }
+
+  @Get('admin')
+  async findAdminDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findAdminDataBox());
   }
 }

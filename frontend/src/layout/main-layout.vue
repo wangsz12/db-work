@@ -15,9 +15,13 @@ import {
   IconCaretDown,
   IconBookmark,
   IconSubscribeAdd,
-  IconLayers
+  IconLayers,
+  IconUserGroup,
+  IconUserAdd,
+  IconPen
 } from '@arco-design/web-vue/es/icon'
 import { useStore } from '@/store'
+import DropDownItem from '@/components/DropDownItem.vue'
 
 const router = useRouter()
 
@@ -171,6 +175,28 @@ function logout() {
           </div>
         </div>
         <div class="divider" />
+        <div id="admin-manage">
+          <div class="side-bar-title">
+            <span>管理员管理</span>
+          </div>
+          <div>
+            <menu-item
+              text="全部管理员"
+              name="all-admin"
+              to="/admin"
+            >
+              <icon-user-group size="large" />
+            </menu-item>
+            <menu-item
+              text="新增管理员"
+              name="new-admin"
+              to="/admin/new"
+            >
+              <icon-user-add size="large" />
+            </menu-item>
+          </div>
+        </div>
+        <div class="divider" />
         <div id="logout">
           <div class="side-bar-title">
             <span>操作</span>
@@ -201,15 +227,18 @@ function logout() {
             <icon-caret-down size="large" />
           </div>
           <div class="dropdown">
-            <div
-              class="dropdown-item"
+            <DropDownItem
+              text="更换密码"
+              @click="() => router.push('/user/change-password')"
+            >
+              <icon-pen size="large" />
+            </DropDownItem>
+            <DropDownItem
+              text="退出登录"
               @click="logout"
             >
-              <div class="dropdown-content">
-                <icon-poweroff size="large" />
-                <span>退出登录</span>
-              </div>
-            </div>
+              <icon-poweroff size="large" />
+            </DropDownItem>
           </div>
         </div>
       </div>
@@ -268,11 +297,11 @@ function logout() {
 
       .title-box {
         display: flex;
+        justify-content: center;
+        align-items: center;
 
         span {
           color: white;
-          display: inline-flex;
-          align-items: center;
           font-size: 1.1rem;
         }
       }

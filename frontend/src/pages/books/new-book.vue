@@ -42,9 +42,6 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
       $message.success('信息录入成功')
       router.push('/books')
     })
-    .catch(() => {
-      $message.error('网络错误')
-    })
 }
 </script>
 

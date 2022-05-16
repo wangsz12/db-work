@@ -24,16 +24,13 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
       $message.success('新增出版社成功')
       router.push('/publishers')
     })
-    .catch(() => {
-      $message.error('网络错误')
-    })
 }
 </script>
 
 <template>
   <div class="container">
     <div class="form-box">
-      <span class="title">新增出版社 </span>
+      <span class="title">新增出版社</span>
       <a-form
         class="form"
         :label-col-props="{ span: 7 }"

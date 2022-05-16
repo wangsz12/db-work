@@ -52,9 +52,6 @@ function handleSubmit({values, errors} : {values: any, errors: unknown}) {
       $message.success('借出成功')
       router.push('/books/lend/record')
     })
-    .catch(() => {
-      $message.error('网络错误')
-    })
 }
 </script>
 

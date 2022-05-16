@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { createCard } from '@/apis/card'
-import { useMessage } from '@/utils'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const $message = useMessage()
 const router = useRouter()
 
 const form = reactive({
@@ -14,6 +12,7 @@ const form = reactive({
   address: ''
 })
 const newID = ref('')
+const visible = ref(false)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleSubmit({values, errors}: {values: any, errors: unknown}) {
@@ -26,12 +25,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
       newID.value = res.data.id
       visible.value = true
     })
-    .catch(() => {
-      $message.error('网络错误')
-    })
 }
-
-const visible = ref(false)
 
 function handleModalOK() {
   router.push('/cards')
@@ -142,6 +136,7 @@ function handleModalOK() {
   <a-modal
     v-model:visible="visible"
     title="创建成功"
+    hide-cancel
     @ok="handleModalOK"
   >
     <span style="margin-right: .5rem;">创建成功，卡号为</span>

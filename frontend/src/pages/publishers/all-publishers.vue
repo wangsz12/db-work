@@ -55,9 +55,6 @@ function handleTablePageChange(page: number) {
       tableData.length = 0
       tableData.push(...res.data.publishers)
     })
-    .catch(() => {
-      $message.error('网络错误')
-    })
 }
 
 function deletePublisher(id: string) {

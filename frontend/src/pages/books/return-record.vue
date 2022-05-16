@@ -83,13 +83,19 @@ function handleTablePageChange(page: number) {
         @page-change="handleTablePageChange"
       >
         <template #isOverdue="{ record }">
-          <span> {{ record.isOverdue ? '是' : '否' }} </span>
+          <span :style="`${record.isOverdue ? 'color: #fc243a' : ''}`"> {{ record.isOverdue ? '是' : '否' }} </span>
         </template>
         <template #fine="{ record }">
-          <span> {{ record.fine }}元 </span>
+          <span> {{ record.fine > 0 ? `${record.fine}元` : '-' }} </span>
         </template>
         <template #paid="{ record }">
-          <span> {{ record.paid ? '是' : '否' }} </span>
+          <span :style="`${record.isOverdue && !record.paid ? 'color: #fc243a' : ''}`">
+            {{
+              record.isOverdue
+                ? record.paid ? '是' : '否'
+                : '-'
+            }}
+          </span>
         </template>
       </a-table>
     </div>

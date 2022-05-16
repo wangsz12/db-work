@@ -18,7 +18,7 @@ const fineRecords: Partial<FineRecord>[] = reactive([])
 
 function handleFineIDChange(e: Event) {
   const cardID: string = (e.target as HTMLInputElement).value
-  if (/^1\d{6}$/.test(cardID)) {
+  if (/^C\d{7}$/.test(cardID)) {
     getFineRecordsByCardID(cardID)
       .then(({data: res}) => {
         fineRecords.splice(0, fineRecords.length)
@@ -48,9 +48,9 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
     return
   }
   
-  const { cardID, fineID } = values
+  const { fineID } = values
 
-  payFine({ cardID, fineID })
+  payFine(fineID)
     .then(() => {
       $message.success('罚款缴纳成功')
       router.push('/fines')
@@ -85,7 +85,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
                 message: '读者证号为必填'
               },
               {
-                match: /^1\d{6}$/,
+                match: /^C\d{7}$/,
                 message: '请检查读者证号是否合法'
               }
             ]"
@@ -113,7 +113,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             >{{ currentRecord.record }}</span>
             <a-button
               type="primary"
-              :disabled="!(fineRecords.length as boolean)"
+              :disabled="!(fineRecords.length as unknown as boolean)"
               @click="() => visible = true"
             >
               {{ form.fineID === '' ? '选择记录' : '修改记录' }}
@@ -141,7 +141,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             field="fine"
             label="应缴罚款"
           >
-            <span> {{ currentRecord.fine ? `${currentRecord.fine}元` : '-' }} </span>
+            <h3> {{ currentRecord.fine ? `￥${currentRecord.fine}元` : '-' }} </h3>
           </a-form-item>
           <div class="submit-box">
             <a-button

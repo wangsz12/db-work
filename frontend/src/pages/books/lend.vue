@@ -27,7 +27,7 @@ watch(() => form.duration, (newVal) => {
 })
 
 function handleBookIDChange(value: string) {
-  if (/^b\d{7}$/.test(value)) {
+  if (/^B\d{7}$/.test(value)) {
     getBookByID(value)
       .then(({data: res}) => {
         const { name, author, isbn } = res.data
@@ -45,14 +45,12 @@ function handleSubmit({values, errors} : {values: any, errors: unknown}) {
   }
 
   const { cardID, bookID, duration } = values
+  console.log('cardID, bookID, duration: ', cardID, bookID, duration)
 
   lend({ cardID, bookID, duration })
     .then(() => {
       $message.success('借出成功')
-      router.push('/books')
-    })
-    .catch(() => {
-      $message.error('网络错误')
+      router.push('/books/lend/record')
     })
 }
 </script>
@@ -81,7 +79,7 @@ function handleSubmit({values, errors} : {values: any, errors: unknown}) {
                 message: '读者证号为必填'
               },
               {
-                match: /^1\d{6}$/,
+                match: /^C\d{7}$/,
                 message: '请检查读者证号是否合法'
               }
             ]"
@@ -101,7 +99,7 @@ function handleSubmit({values, errors} : {values: any, errors: unknown}) {
                 message: '图书编号为必填'
               },
               {
-                match: /^b\d{7}$/,
+                match: /^B\d{7}$/,
                 message: '请检查图书编号是否合法'
               }
             ]"

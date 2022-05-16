@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { createCard } from '@/apis/card'
-import { reactive, ref } from 'vue'
+import { changePwd } from '@/apis/admin'
+import { useStore } from '@/store'
+import { useMessage } from '@/utils'
+import md5 from 'blueimp-md5'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
+const $message = useMessage()
 const router = useRouter()
+const store = useStore()
 
 const form = reactive({
-  name: '',
-  gender: 0,
-  contact: '',
-  address: ''
+  prev: '',
+  new: '',
+  repeat: ''
 })
-const newID = ref('')
-const visible = ref(false)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleSubmit({values, errors}: {values: any, errors: unknown}) {
@@ -20,22 +22,28 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
     return
   }
 
-  createCard(values)
-    .then(({data: res}) => {
-      newID.value = res.data.id
-      visible.value = true
-    })
-}
+  if (values.prev === values.new) {
+    $message.warning('新旧密码必须不一致')
+    form.new = form.repeat = ''
+    return
+  }
 
-function handleModalOK() {
-  router.push('/cards')
+  changePwd(store.id, md5(values.prev) ,md5(values.new))
+    .then(() => {
+      $message.success('修改密码成功')
+      router.push('/')
+    })
+    .catch((err: Error) => {
+      $message.error(err.message)
+      form.prev = ''
+    })
 }
 </script>
 
 <template>
   <div class="container">
     <div class="form-box">
-      <span class="title">新建读者证</span>
+      <span class="title">更改密码</span>
       <a-form
         class="form"
         :label-col-props="{ span: 7 }"
@@ -48,77 +56,61 @@ function handleModalOK() {
           :size="12"
         >
           <a-form-item
-            field="name"
-            label="姓名"
+            field="prev"
+            label="旧密码"
             :rules="[
               {
                 required: true,
-                message: '姓名为必填'
+                message: '旧密码为必填'
               }
             ]"
             validate-trigger="input"
           >
-            <a-input
-              v-model="form.name"
-              placeholder="请输入姓名"
+            <a-input-password
+              v-model="form.prev"
+              placeholder="请输入旧密码"
             />
           </a-form-item>
           <a-form-item
-            field="gender"
-            label="性别"
+            field="new"
+            label="新密码"
             :rules="[
               {
                 required: true,
-                message: '性别为必填'
-              }
-            ]"
-            validate-trigger="input"
-          >
-            <a-select
-              v-model="form.gender"
-              placeholder="请选择性别"
-            >
-              <a-option :value="0">
-                男
-              </a-option>
-              <a-option :value="1">
-                女
-              </a-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item
-            field="contact"
-            label="联系方式"
-            :rules="[
-              {
-                required: true,
-                message: '联系方式为必填'
+                message: '新密码为必填'
               },
               {
-                match: /^1\d{10}$/,
-                message: '请检查联系方式是否合法'
+                minLength: 6,
+                message: '密码长度至少为6'
               }
             ]"
             validate-trigger="input"
           >
-            <a-input
-              v-model="form.contact"
-              placeholder="请输入联系方式"
+            <a-input-password
+              v-model="form.new"
+              placeholder="请输入新密码"
             />
           </a-form-item>
           <a-form-item
-            field="address"
-            label="地址"
+            field="repeat"
+            label="重复新密码"
             :rules="[
               {
                 required: true,
-                message: '地址为必填'
+                message: '请重复新密码'
+              },
+              {
+                validator: (value, cb) => {
+                  if (value !== form.new) {
+                    cb('两次输入的密码不一致')
+                  }
+                }
               }
             ]"
           >
-            <a-input
-              v-model="form.address"
-              placeholder="请输入地址"
+            <a-input-password
+              v-model="form.repeat"
+              placeholder="请重复新密码"
             />
           </a-form-item>
           <div class="submit-box">
@@ -133,15 +125,6 @@ function handleModalOK() {
       </a-form>
     </div>
   </div>
-  <a-modal
-    v-model:visible="visible"
-    title="创建成功"
-    hide-cancel
-    @ok="handleModalOK"
-  >
-    <span style="margin-right: .5rem;">创建成功，卡号为</span>
-    <strong> {{ newID }} </strong>
-  </a-modal>
 </template>
 
 <style lang="scss" scoped>

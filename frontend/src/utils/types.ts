@@ -47,11 +47,6 @@ export interface FineRecord {
   fine: number
 }
 
-export interface PayFineRequest {
-  cardID: string,
-  fineID: string
-}
-
 export interface CreateCardRequest {
   name: string,
   gender: number,
@@ -68,7 +63,28 @@ export interface BookListItem {
   price: number
 }
 
+export interface CreateBookRequest {
+  name: string,
+  author: string,
+  category: string;
+  isbn: string;
+  publisherID: string;
+  price: number;
+}
+
+export interface CreatePublisherRequest {
+  name: string;
+  contact: string;
+  address: string;
+}
+
 export interface PurchaseRequest {
   bookID: string,
-  price: number
+  quantity: number
+}
+
+export interface CreateAdminRequest {
+  name: string;
+  account: string;
+  password: string;
 }

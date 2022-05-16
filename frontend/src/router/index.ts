@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import routes from './router-map'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { useGlobalStore } from "@/store"
+import { useStore } from "@/store"
 
 const router = createRouter({
   routes,
@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to) => {
-  useGlobalStore().setSelectedItemName(to.name as string)
+  useStore().setSelectedItemName(to.name as string)
   NProgress.done()
 })
 

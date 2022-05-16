@@ -19,7 +19,7 @@ const currentRecord: Partial<LendRecord> = reactive({})
 
 function handleCardIDChange(e: Event) {
   const cardID: string = (e.target as HTMLInputElement).value
-  if (/^1\d{6}$/.test(cardID)) {
+  if (/^C\d{7}$/.test(cardID)) {
     getLendRecordsByCardID(cardID)
       .then(({data: res}) => {
         lendRecords.length = 0
@@ -52,7 +52,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
   returnBook(values)
     .then(() => {
       $message.success('归还成功')
-      router.push('/books')
+      router.push('/books/return/record')
     })
     .catch(() => {
       $message.success('网络错误')
@@ -84,7 +84,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
                 message: '读者证号为必填'
               },
               {
-                match: /^1\d{6}$/,
+                match: /^C\d{7}$/,
                 message: '请检查读者证号是否合法'
               }
             ]"
@@ -112,7 +112,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             >{{ currentRecord.record }}</span>
             <a-button
               type="primary"
-              :disabled="!(lendRecords.length as boolean)"
+              :disabled="!(lendRecords.length as unknown as boolean)"
               @click="() => visible = true"
             >
               {{ form.lendID === '' ? '选择记录' : '修改记录' }}
@@ -122,7 +122,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             field="bookID"
             label="图书编号"
           >
-            <span> {{ currentRecord.id ?? '-' }} </span>
+            <span> {{ currentRecord.book?.id ?? '-' }} </span>
           </a-form-item>
           <a-form-item
             field="bookName"

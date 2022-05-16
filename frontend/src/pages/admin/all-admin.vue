@@ -1,33 +1,25 @@
 <script setup lang="ts">
-import { deletePublisherByID, getPublisherByPage, getPublisherDataBox } from '@/apis/publishers'
+import { deleteAdminByID, getAdminByPage, getAdminDataBox } from '@/apis/admin'
 import { useMessage, withAlignCenter } from '@/utils'
 import { TableColumnData, TableData } from '@arco-design/web-vue'
 import { reactive, ref } from 'vue'
-import { IconPrinter } from "@arco-design/web-vue/es/icon"
+import { IconUserGroup } from '@arco-design/web-vue/es/icon'
 
 const $message = useMessage()
 
-const dataBox = reactive({
-  total: -1
-})
-
 const columns: TableColumnData[] = withAlignCenter([
   {
-    title: '编号',
+    title: '工号',
     dataIndex: 'id',
-    width: 250
+    width: 150
   },
   {
-    title: '名称',
+    title: '姓名',
     dataIndex: 'name'
   },
   {
-    title: '联系方式',
-    dataIndex: 'contact'
-  },
-  {
-    title: '地址',
-    dataIndex: 'address'
+    title: '账号',
+    dataIndex: 'account'
   },
   {
     title: '操作',
@@ -35,57 +27,61 @@ const columns: TableColumnData[] = withAlignCenter([
     width: 100
   }
 ])
-const tableData: TableData[] = reactive([])
-const total = ref(0)
 
-getPublisherDataBox()
+const dataBox = reactive({
+  total: -1
+})
+const total = ref(0)
+const tableData: TableData[] = reactive([])
+
+getAdminDataBox()
   .then(({data: res}) => {
     Object.assign(dataBox, res.data)
   })
 
-getPublisherByPage()
-  .then(({data: res}) => {
-    total.value = res.data.total
-    tableData.push(...res.data.publishers)
-  })
+getAdminByPage()
+    .then(({data: res}) => {
+      total.value = res.data.total
+      tableData.push(...res.data.admin)
+    })
 
 function handleTablePageChange(page: number) {
-  getPublisherByPage(page)
+  getAdminByPage(page)
     .then(({data: res}) => {
       tableData.length = 0
-      tableData.push(...res.data.publishers)
+      tableData.push(...res.data.admin)
     })
 }
 
-function deletePublisher(id: string) {
-  deletePublisherByID(id)
+function deleteAdmin(id: string) {
+  deleteAdminByID(id)
     .then(() => {
       $message.success('删除成功')
-      getPublisherByPage()
+      getAdminByPage()
         .then(({data: res}) => {
           total.value = res.data.total
           tableData.length = 0
-          tableData.push(...res.data.publishers)
+          tableData.push(...res.data.admin)
         })
     })
 }
 </script>
 
 <template>
-  <div class="container">
-    <div
-      class="data-box"
-      style="width: 80%"
+  <div
+    class="data-box"
+    style="width: 80%"
+  >
+    <DataBox
+      title="管理员总数量"
+      :value="dataBox.total"
     >
-      <DataBox
-        title="出版商总数量"
-        :value="dataBox.total"
-      >
-        <icon-printer :style="{fontSize: '22px'}" />
-      </DataBox>
-    </div>
+      <icon-user-group :style="{fontSize: '22px'}" />
+    </DataBox>
+  </div>
+  <div class="container">
     <div class="content-box">
-      <span class="content-title">出版商信息</span>
+      <span class="content-title">管理员信息</span>
       <a-table
         class="table"
         :columns="columns"
@@ -101,7 +97,7 @@ function deletePublisher(id: string) {
         <template #operation="{ record }">
           <a-popconfirm
             content="确定要删除吗？"
-            @ok="deletePublisher(record.id)"
+            @ok="deleteAdmin(record.id)"
           >
             <a-button
               type="primary"
@@ -122,11 +118,14 @@ function deletePublisher(id: string) {
     height: 100%;
     width: 100%;
     display: block;
+    box-sizing: border-box;
+    padding-left: 10%;
+    padding-right: 10%;
 
     .content-box {
       @extend .component;
-      margin-top: 1.5rem;
       padding: 1.5rem;
+      margin-top: 1.5rem;
       
       .content-title {
         font-size: 1.3rem;
@@ -139,4 +138,3 @@ function deletePublisher(id: string) {
     }
   }
 </style>
-

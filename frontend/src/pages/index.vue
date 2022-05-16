@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from '@/store'
+import { useStore } from '@/store'
 import dayjs from 'dayjs'
 import {
   IconBook,
@@ -10,8 +10,8 @@ import {
 import { reactive, ref } from 'vue'
 import { TableColumnData, TableData } from '@arco-design/web-vue'
 import { withAlignCenter } from '@/utils'
-import { getRecentRecord } from '@/apis/book'
-import { getIndexDataBox } from '@/apis/other'
+import { getRecentRecords } from '@/apis/records'
+import { getIndexDataBox } from '@/apis/data-box'
 
 let greeting = (() => {
   const hour = dayjs().hour()
@@ -22,7 +22,7 @@ let greeting = (() => {
   if (hour >= 18 || hour < 6) return '晚上好'
 })()
 
-const userInfo = useUserStore()
+const userInfo = useStore()
 
 const columns: TableColumnData[] = withAlignCenter([
   {
@@ -32,13 +32,18 @@ const columns: TableColumnData[] = withAlignCenter([
     width: 100
   },
   {
+    title: '操作时间',
+    dataIndex: 'date',
+    width: 150
+  },
+  {
     title: '书名',
-    dataIndex: 'name',
+    dataIndex: 'book.name',
   },
   {
     title: '作者',
-    dataIndex: 'author',
-    width: 300
+    dataIndex: 'book.author',
+    width: 200
   },
   {
     title: '读者证号',
@@ -67,7 +72,7 @@ const dataBox = reactive({
 })
 const loading = ref(true)
 
-getRecentRecord()
+getRecentRecords()
   .then(({data: res}) => {
     tableData.push(...res.data as TableData[])
   })
@@ -118,7 +123,7 @@ getIndexDataBox()
       </DataBox>
     </div>
     <div class="content-box">
-      <span class="content-title">最近借阅情况</span>
+      <span class="content-title">最近借还情况</span>
       <a-table
         class="table"
         :columns="columns"

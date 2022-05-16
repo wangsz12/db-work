@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { createCard } from '@/apis/card'
-import { reactive, ref } from 'vue'
+import { createPublisher } from '@/apis/publishers'
+import { useMessage } from '@/utils'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
+const $message = useMessage()
 const router = useRouter()
 
 const form = reactive({
   name: '',
-  gender: 0,
   contact: '',
   address: ''
 })
-const newID = ref('')
-const visible = ref(false)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleSubmit({values, errors}: {values: any, errors: unknown}) {
@@ -20,22 +19,18 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
     return
   }
 
-  createCard(values)
-    .then(({data: res}) => {
-      newID.value = res.data.id
-      visible.value = true
+  createPublisher(values)
+    .then(() => {
+      $message.success('新增出版社成功')
+      router.push('/publishers')
     })
-}
-
-function handleModalOK() {
-  router.push('/cards')
 }
 </script>
 
 <template>
   <div class="container">
     <div class="form-box">
-      <span class="title">新建读者证</span>
+      <span class="title">新增出版社</span>
       <a-form
         class="form"
         :label-col-props="{ span: 7 }"
@@ -49,42 +44,19 @@ function handleModalOK() {
         >
           <a-form-item
             field="name"
-            label="姓名"
+            label="名称"
             :rules="[
               {
                 required: true,
-                message: '姓名为必填'
+                message: '出版社名称为必填'
               }
             ]"
             validate-trigger="input"
           >
             <a-input
               v-model="form.name"
-              placeholder="请输入姓名"
+              placeholder="请输入出版社名称"
             />
-          </a-form-item>
-          <a-form-item
-            field="gender"
-            label="性别"
-            :rules="[
-              {
-                required: true,
-                message: '性别为必填'
-              }
-            ]"
-            validate-trigger="input"
-          >
-            <a-select
-              v-model="form.gender"
-              placeholder="请选择性别"
-            >
-              <a-option :value="0">
-                男
-              </a-option>
-              <a-option :value="1">
-                女
-              </a-option>
-            </a-select>
           </a-form-item>
           <a-form-item
             field="contact"
@@ -93,10 +65,6 @@ function handleModalOK() {
               {
                 required: true,
                 message: '联系方式为必填'
-              },
-              {
-                match: /^1\d{10}$/,
-                message: '请检查联系方式是否合法'
               }
             ]"
             validate-trigger="input"
@@ -133,15 +101,6 @@ function handleModalOK() {
       </a-form>
     </div>
   </div>
-  <a-modal
-    v-model:visible="visible"
-    title="创建成功"
-    hide-cancel
-    @ok="handleModalOK"
-  >
-    <span style="margin-right: .5rem;">创建成功，卡号为</span>
-    <strong> {{ newID }} </strong>
-  </a-modal>
 </template>
 
 <style lang="scss" scoped>

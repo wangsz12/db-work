@@ -6,5 +6,6 @@ store.use(piniaPersist)
 
 export default store
 
-export { useUserStore } from './user'
-export { useGlobalStore } from './global'
+export { useStore } from './store'
+// export { useGlobalStore } from './global'
+// export { useUserStore } from './user'

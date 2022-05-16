@@ -7,6 +7,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/login.vue')
   },
   {
+    path: '/index',
+    redirect: '/',
+  },
+  {
     path: '/',
     name: 'layout',
     component: () => import('@/layout/main-layout.vue'),
@@ -27,6 +31,11 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'all-books',
         component: () => import('@/pages/books/all-books.vue')
+      },
+      {
+        path: 'new',
+        name: 'new-book',
+        component: () => import('@/pages/books/new-book.vue')
       },
       {
         path: 'lend/record',
@@ -95,9 +104,43 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/publishers/all-publishers.vue')
       },
       {
+        path: 'new',
+        name: 'new-publisher',
+        component: () => import('@/pages/publishers/new-publisher.vue')
+      },
+      {
         path: 'purchase',
-        name: 'purchase-book',
+        name: 'purchase',
         component: () => import('@/pages/publishers/purchase-book.vue')
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('@/layout/main-layout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-admin',
+        component: () => import('@/pages/admin/all-admin.vue')
+      },
+      {
+        path: 'new',
+        name: 'new-admin',
+        component: () => import('@/pages/admin/new-admin.vue')
+      }
+    ]
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import('@/layout/main-layout.vue'),
+    children: [
+      {
+        path: 'change-password',
+        name: 'change-password',
+        component: () => import('@/pages/user/change-pwd.vue')
       }
     ]
   },

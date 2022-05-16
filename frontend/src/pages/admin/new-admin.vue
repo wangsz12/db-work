@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { createCard } from '@/apis/card'
+import { createAdmin } from '@/apis/admin'
+import md5 from 'blueimp-md5'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -7,9 +8,8 @@ const router = useRouter()
 
 const form = reactive({
   name: '',
-  gender: 0,
-  contact: '',
-  address: ''
+  account: '',
+  password: ''
 })
 const newID = ref('')
 const visible = ref(false)
@@ -20,7 +20,9 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
     return
   }
 
-  createCard(values)
+  values.password = md5(values.password)
+
+  createAdmin(values)
     .then(({data: res}) => {
       newID.value = res.data.id
       visible.value = true
@@ -28,14 +30,14 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
 }
 
 function handleModalOK() {
-  router.push('/cards')
+  router.push('/admin')
 }
 </script>
 
 <template>
   <div class="container">
     <div class="form-box">
-      <span class="title">新建读者证</span>
+      <span class="title">新增管理员</span>
       <a-form
         class="form"
         :label-col-props="{ span: 7 }"
@@ -56,7 +58,6 @@ function handleModalOK() {
                 message: '姓名为必填'
               }
             ]"
-            validate-trigger="input"
           >
             <a-input
               v-model="form.name"
@@ -64,61 +65,37 @@ function handleModalOK() {
             />
           </a-form-item>
           <a-form-item
-            field="gender"
-            label="性别"
+            field="account"
+            label="账号"
             :rules="[
               {
                 required: true,
-                message: '性别为必填'
+                message: '账号为必填'
               }
             ]"
-            validate-trigger="input"
-          >
-            <a-select
-              v-model="form.gender"
-              placeholder="请选择性别"
-            >
-              <a-option :value="0">
-                男
-              </a-option>
-              <a-option :value="1">
-                女
-              </a-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item
-            field="contact"
-            label="联系方式"
-            :rules="[
-              {
-                required: true,
-                message: '联系方式为必填'
-              },
-              {
-                match: /^1\d{10}$/,
-                message: '请检查联系方式是否合法'
-              }
-            ]"
-            validate-trigger="input"
           >
             <a-input
-              v-model="form.contact"
-              placeholder="请输入联系方式"
+              v-model="form.account"
+              placeholder="请输入账号"
             />
           </a-form-item>
           <a-form-item
-            field="address"
-            label="地址"
+            field="password"
+            label="密码"
             :rules="[
               {
                 required: true,
-                message: '地址为必填'
+                message: '密码为必填'
+              },
+              {
+                minLength: 6,
+                message: '密码长度至少为6'
               }
             ]"
           >
             <a-input
-              v-model="form.address"
-              placeholder="请输入地址"
+              v-model="form.password"
+              placeholder="请输入密码"
             />
           </a-form-item>
           <div class="submit-box">
@@ -139,7 +116,7 @@ function handleModalOK() {
     hide-cancel
     @ok="handleModalOK"
   >
-    <span style="margin-right: .5rem;">创建成功，卡号为</span>
+    <span style="margin-right: .5rem;">创建成功，管理员工号为</span>
     <strong> {{ newID }} </strong>
   </a-modal>
 </template>

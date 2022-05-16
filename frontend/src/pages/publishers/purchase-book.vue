@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getBookByID, getBooksByPublisher } from '@/apis/book'
-import { getPublisherByID, purchase } from '@/apis/publishers'
+import { getBookByID, getBooksByPublisher, purchase } from '@/apis/book'
+import { getPublisherByID } from '@/apis/publishers'
 import { useMessage } from '@/utils'
 import { BookListItem } from '@/utils/types'
 import { computed, reactive, ref } from 'vue'
@@ -26,7 +26,7 @@ const totalPrice = computed(() => ((currentRecord.price ?? 0) * (form.quantity ?
 
 function handlePublisherIDChange(e: Event) {
   const publisherID: string = (e.target as HTMLInputElement).value
-  if (/^P\d{6}$/.test(publisherID)) {
+  if (/^P\d{4}$/.test(publisherID)) {
     getPublisherByID(publisherID)
       .then(({data: res}) => {
         publisher.name = res.data.name
@@ -67,7 +67,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
   purchase(values)
     .then(() => {
       $message.success('订购成功')
-      router.push('/publishers')
+      router.push('/books')
     })
 }
 </script>
@@ -96,7 +96,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
                 message: '出版商编号为必填'
               },
               {
-                match: /^P\d{6}$/,
+                match: /^P\d{4}$/,
                 message: '请检查出版商编号是否合法'
               }
             ]"
@@ -130,7 +130,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             >{{ currentRecord.record }}</span>
             <a-button
               type="primary"
-              :disabled="!(booksList.length as boolean)"
+              :disabled="!(booksList.length as unknown as boolean)"
               @click="() => visible = true"
             >
               {{ form.bookID === '' ? '选择记录' : '修改记录' }}

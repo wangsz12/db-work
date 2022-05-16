@@ -13,17 +13,24 @@ import {
   IconPoweroff,
   IconUser,
   IconCaretDown,
-  IconBookmark
+  IconBookmark,
+  IconSubscribeAdd,
+  IconLayers,
+  IconUserGroup,
+  IconUserAdd,
+  IconPen
 } from '@arco-design/web-vue/es/icon'
-import { useUserStore } from '@/store/user'
+import { useStore } from '@/store'
+import DropDownItem from '@/components/DropDownItem.vue'
 
 const router = useRouter()
 
-const userInfo = useUserStore()
+const userInfo = useStore()
 let showTitleBar = ref(false)
 let contentTitle = ref('Title')
 
 function logout() {
+  localStorage.removeItem('token')
   router.push('/login')
 }
 </script>
@@ -56,6 +63,13 @@ function logout() {
               to="/books"
             >
               <icon-book size="large" />
+            </menu-item>
+            <menu-item
+              text="录入图书信息"
+              name="new-book"
+              to="/books/new"
+            >
+              <icon-layers size="large" />
             </menu-item>
             <menu-item
               text="借出记录"
@@ -102,7 +116,7 @@ function logout() {
             </menu-item>
             <menu-item
               text="新增读者证"
-              name="add-cards"
+              name="new-card"
               to="/cards/new"
             >
               <icon-plus-circle size="large" />
@@ -138,18 +152,47 @@ function logout() {
           </div>
           <div>
             <menu-item
-              text="全部出版商"
+              text="全部出版社"
               name="all-publishers"
               to="/publishers"
             >
               <icon-printer size="large" />
             </menu-item>
             <menu-item
+              text="新增出版社"
+              name="new-publisher"
+              to="/publishers/new"
+            >
+              <icon-plus-circle size="large" />
+            </menu-item>
+            <menu-item
               text="订购图书"
               name="purchase"
               to="/publishers/purchase"
             >
-              <icon-plus-circle size="large" />
+              <icon-subscribe-add size="large" />
+            </menu-item>
+          </div>
+        </div>
+        <div class="divider" />
+        <div id="admin-manage">
+          <div class="side-bar-title">
+            <span>管理员管理</span>
+          </div>
+          <div>
+            <menu-item
+              text="全部管理员"
+              name="all-admin"
+              to="/admin"
+            >
+              <icon-user-group size="large" />
+            </menu-item>
+            <menu-item
+              text="新增管理员"
+              name="new-admin"
+              to="/admin/new"
+            >
+              <icon-user-add size="large" />
             </menu-item>
           </div>
         </div>
@@ -184,15 +227,18 @@ function logout() {
             <icon-caret-down size="large" />
           </div>
           <div class="dropdown">
-            <div class="dropdown-item">
-              <div
-                class="dropdown-content"
-                @click="logout"
-              >
-                <icon-poweroff size="large" />
-                <span>退出登录</span>
-              </div>
-            </div>
+            <DropDownItem
+              text="更换密码"
+              @click="() => router.push('/user/change-password')"
+            >
+              <icon-pen size="large" />
+            </DropDownItem>
+            <DropDownItem
+              text="退出登录"
+              @click="logout"
+            >
+              <icon-poweroff size="large" />
+            </DropDownItem>
           </div>
         </div>
       </div>
@@ -251,11 +297,11 @@ function logout() {
 
       .title-box {
         display: flex;
+        justify-content: center;
+        align-items: center;
 
         span {
           color: white;
-          display: inline-flex;
-          align-items: center;
           font-size: 1.1rem;
         }
       }
@@ -271,9 +317,24 @@ function logout() {
       z-index: 999;
       box-shadow: 0 0 .2px .2px rgba(0, 0, 0, 0.1);
 
-      &::-webkit-scrollbar-track,
-      &::-webkit-scrollbar,
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 3px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0.08);
+      }
+
       &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: rgba(0, 0, 0, 0.15);
+        transition: all .2s;
+        height: 20px;
+      }
+
+      &::-webkit-scrollbar-button,
+      &::-webkit-scrollbar-corner {
         display: none;
       }
 

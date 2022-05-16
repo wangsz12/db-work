@@ -82,3 +82,9 @@ export interface PurchaseRequest {
   bookID: string,
   quantity: number
 }
+
+export interface CreateAdminRequest {
+  name: string;
+  account: string;
+  password: string;
+}

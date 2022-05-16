@@ -8,6 +8,7 @@ import {
 } from '@arco-design/web-vue/es/icon'
 import { useMessage } from '@/utils'
 import { useStore } from '@/store'
+import md5 from 'blueimp-md5'
 
 const router = useRouter()
 const $message = useMessage()
@@ -30,7 +31,7 @@ function loginBtnHdl() {
   }
 
   logining.value = true
-  login(credentials.account, credentials.password)
+  login(credentials.account, md5(credentials.password))
     .then(({data: res}) => {
       const { id, name, token } = res.data
       localStorage.setItem('token', token)

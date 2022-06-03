@@ -18,7 +18,7 @@ const columns: TableColumnData[] = withAlignCenter([
   },
   {
     title: '父分类',
-    dataIndex: 'parent',
+    slotName: 'parent'
   },
   {
     title: '操作',
@@ -100,9 +100,12 @@ function deleteCategory(id: string) {
         page-position="bottom"
         @page-change="handleTablePageChange"
       >
+        <template #parent="{ record }">
+          <span> {{ record.parent ? record.parent.name : '-' }} </span>
+        </template>
         <template #operation="{ record }">
           <a-popconfirm
-            content="确定要删除吗？"
+            :content="`确定要删除吗？${record.parent ? '该分类为父分类，删除后子分类会一并删除' : ''}`"
             @ok="deleteCategory(record.id)"
           >
             <a-button

@@ -14,13 +14,19 @@ export class CategoriesService {
     return await this.categoriesDao.findTotalQuantity();
   }
 
-  async findAllParent(): Promise<string[]> {
-    const res = await this.categoriesDao.findAllParent();
-
-    return res.map(({ id, name }) => `${id} / ${name}`);
+  async findAllParent(): Promise<CategoryEntity[]> {
+    return await this.categoriesDao.findAllParent();
   }
 
-  async create(id: string, name: string, parentID: string): Promise<boolean> {
+  async findAllSub(): Promise<CategoryEntity[]> {
+    return await this.categoriesDao.findAllSub();
+  }
+
+  async create(
+    id: string,
+    name: string,
+    parentID: string | null,
+  ): Promise<boolean> {
     let parent = null;
 
     if (parentID) {

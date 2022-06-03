@@ -66,3 +66,11 @@ export function purchase({ bookID, quantity }: PurchaseRequest) {
     quantity
   })
 }
+
+export function deleteBookByID(id: string) {
+  return Axios.delete('/books', {
+    params: {
+      id
+    }
+  })
+}

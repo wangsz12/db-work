@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -25,6 +26,7 @@ export class BooksController {
       books: books.map((item) => ({
         ...item,
         publisher: item.publisher.name,
+        category: item.category.name,
       })),
     });
   }
@@ -70,6 +72,14 @@ export class BooksController {
   @Patch('purchase')
   async purchase(@Body() { bookID, quantity }): Promise<ResponseData> {
     const res = await this.booksService.purchase(bookID, quantity);
+
+    return res ? trueReturn() : falseReturn();
+  }
+
+  @Delete()
+  async delete(@Query('id') id: string): Promise<ResponseData> {
+    const res = await this.booksService.delete(id);
+
     return res ? trueReturn() : falseReturn();
   }
 }

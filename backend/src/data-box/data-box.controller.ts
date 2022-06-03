@@ -36,4 +36,9 @@ export class DataBoxController {
   async findAdminDataBox(): Promise<ResponseData> {
     return trueReturn(await this.dataBoxService.findAdminDataBox());
   }
+
+  @Get('categories')
+  async findCategoriesDataBox(): Promise<ResponseData> {
+    return trueReturn(await this.dataBoxService.findCategoriesDataBox());
+  }
 }

@@ -7,6 +7,7 @@ import { FinesModule } from './fines/fines.module';
 import { PublishersModule } from './publishers/publishers.module';
 import { RecordsModule } from './records/records.module';
 import { AdminModule } from './admin/admin.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AdminModule } from './admin/admin.module';
     PublishersModule,
     RecordsModule,
     AdminModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [],

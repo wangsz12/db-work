@@ -3,6 +3,7 @@ import { DataBoxDao } from './data-box.dao';
 import { AdminDto } from './dto/admin.dto';
 import { BooksDto } from './dto/books.dto';
 import { CardsDto } from './dto/cards.dto';
+import { CategoriesDto } from './dto/categories.dto';
 import { FinesDto } from './dto/fines.dto';
 import { IndexDto } from './dto/index.dto';
 import { PublishersDto } from './dto/publishers.dto';
@@ -24,7 +25,7 @@ export class DataBoxService {
     return {
       total: await this.dataBoxDao.findBooksQuantity(),
       lend: await this.dataBoxDao.findLendsQuantity(),
-      categories: await this.dataBoxDao.findCategoryQuantity(),
+      categories: await this.dataBoxDao.findCategoriesQuantity(),
     };
   }
 
@@ -59,6 +60,13 @@ export class DataBoxService {
   async findAdminDataBox(): Promise<AdminDto> {
     return {
       total: await this.dataBoxDao.findAdminQuantity(),
+    };
+  }
+
+  async findCategoriesDataBox(): Promise<CategoriesDto> {
+    return {
+      total: await this.dataBoxDao.findCategoriesQuantity(),
+      parents: await this.dataBoxDao.findParentCategoriesQuantity(),
     };
   }
 }

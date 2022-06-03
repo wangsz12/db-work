@@ -37,10 +37,8 @@ export class DataBoxDao {
     return res[0].res;
   }
 
-  async findCategoryQuantity(): Promise<number> {
-    const res = await executeSQL(
-      'SELECT COUNT(DISTINCT category) AS res FROM book',
-    );
+  async findCategoriesQuantity(): Promise<number> {
+    const res = await executeSQL('SELECT COUNT(*) AS res FROM category');
 
     return res[0].res;
   }
@@ -61,6 +59,14 @@ export class DataBoxDao {
 
   async findAdminQuantity(): Promise<number> {
     const res = await executeSQL('SELECT COUNT(*) AS res FROM admin');
+
+    return res[0].res;
+  }
+
+  async findParentCategoriesQuantity(): Promise<number> {
+    const res = await executeSQL(
+      'SELECT COUNT(*) AS res FROM category WHERE parent IS NULL',
+    );
 
     return res[0].res;
   }

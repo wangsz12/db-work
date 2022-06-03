@@ -11,14 +11,6 @@ export function getAdminByPage(page = 1) {
       page
     }
   })
-  // return mockAPIReturn({
-  //   total: 32,
-  //   admin: Array(10).fill('').map((_, index) => ({
-  //     id: String(index),
-  //     name: 'xxx',
-  //     account: 'admin'
-  //   }))
-  // })
 }
 
 export function deleteAdminByID(id: string) {
@@ -27,7 +19,6 @@ export function deleteAdminByID(id: string) {
       id
     }
   })
-  // return mockAPIReturn()
 }
 
 export function createAdmin({ name, account, password }: CreateAdminRequest) {
@@ -36,9 +27,6 @@ export function createAdmin({ name, account, password }: CreateAdminRequest) {
     account,
     password
   })
-  // return mockAPIReturn({
-  //   id: 'A0002'
-  // })
 }
 
 export function changePwd(id: string, prev: string, newPwd: string) {
@@ -47,5 +35,4 @@ export function changePwd(id: string, prev: string, newPwd: string) {
     prev,
     newPwd
   })
-  // return mockAPIReturn()
 }

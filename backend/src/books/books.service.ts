@@ -60,7 +60,11 @@ export class BooksService {
     return res;
   }
 
-  async purchase(bookID: string, quantity: number): Promise<boolean> {
-    return this.booksDao.update(bookID, quantity);
+  async purchase(id: string, quantity: number): Promise<boolean> {
+    return await this.booksDao.update(id, quantity);
+  }
+
+  async delete(id: string): Promise<boolean> {
+    return await this.booksDao.delete(id);
   }
 }

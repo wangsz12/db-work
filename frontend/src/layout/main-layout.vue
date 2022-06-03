@@ -18,7 +18,9 @@ import {
   IconLayers,
   IconUserGroup,
   IconUserAdd,
-  IconPen
+  IconPen,
+  IconArchive,
+  IconFolderAdd
 } from '@arco-design/web-vue/es/icon'
 import { useStore } from '@/store'
 import DropDownItem from '@/components/DropDownItem.vue'
@@ -102,7 +104,29 @@ function logout() {
           </div>
         </div>
         <div class="divider" />
-        <div id="books-manage">
+        <div id="categories-manage">
+          <div class="side-bar-title">
+            <span>分类管理</span>
+          </div>
+          <div>
+            <menu-item
+              text="全部分类"
+              name="all-categories"
+              to="/categories"
+            >
+              <icon-archive size="large" />
+            </menu-item>
+            <menu-item
+              text="新增分类"
+              name="new-category"
+              to="/categories/new"
+            >
+              <icon-folder-add size="large" />
+            </menu-item>
+          </div>
+        </div>
+        <div class="divider" />
+        <div id="cards-manage">
           <div class="side-bar-title">
             <span>读者证管理</span>
           </div>

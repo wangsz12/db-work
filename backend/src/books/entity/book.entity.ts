@@ -1,4 +1,5 @@
 import { IsInt, IsNumber, IsString, Length, Min } from 'class-validator';
+import { CategoryEntity } from 'src/categories/entity/category.entity';
 import { PublisherEntity } from 'src/publishers/entity/publisher.entity';
 
 export class BookEntity {
@@ -8,7 +9,7 @@ export class BookEntity {
     name?: string,
     author?: string,
     quantity?: number,
-    category?: string,
+    category?: CategoryEntity,
     isbn?: string,
     price?: number,
   ) {
@@ -37,8 +38,7 @@ export class BookEntity {
   @Min(0)
   quantity?: number;
 
-  @IsString()
-  category?: string;
+  category?: CategoryEntity;
 
   @IsString()
   @Length(13)

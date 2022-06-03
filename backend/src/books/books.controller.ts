@@ -26,6 +26,7 @@ export class BooksController {
       books: books.map((item) => ({
         ...item,
         publisher: item.publisher.name,
+        category: item.category.name,
       })),
     });
   }

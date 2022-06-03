@@ -90,11 +90,12 @@ export interface CreateAdminRequest {
 }
 
 export interface CreateCategoryRequest {
+  id: string;
   name: string;
   parent: string;
 }
 
-export interface ParentCategory {
+export interface Category {
   id: string;
   name: string;
 }

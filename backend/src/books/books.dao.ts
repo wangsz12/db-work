@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CategoryEntity } from 'src/categories/entity/category.entity';
 import { PublisherEntity } from 'src/publishers/entity/publisher.entity';
 import { executeSQL } from 'src/utils/mysql';
 import { BookEntity } from './entity/book.entity';
@@ -12,7 +13,8 @@ function DB2BookEntity(result: any[]): BookEntity[] {
       name,
       author,
       quantity,
-      category,
+      cid,
+      cname,
       ISBN,
       price,
     }) =>
@@ -22,7 +24,7 @@ function DB2BookEntity(result: any[]): BookEntity[] {
         name,
         author,
         quantity,
-        category,
+        new CategoryEntity(cid, cname),
         ISBN,
         price,
       ),
@@ -34,9 +36,9 @@ export class BooksDao {
   async findAll(page: number): Promise<BookEntity[]> {
     const res = await executeSQL(
       `
-      SELECT book.*, publisher.name AS pname
-      FROM book, publisher
-      WHERE book.publisher_id = publisher.id
+      SELECT book.*, publisher.name AS pname, category.id AS cid, category.name AS cname
+      FROM book, publisher, category
+      WHERE book.publisher_id = publisher.id AND book.category = category.id
       ORDER BY book.id
       LIMIT ?,10
       `,

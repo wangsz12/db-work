@@ -1,6 +1,6 @@
 interface APIResult {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly data: any,
+  readonly data: any | any[],
   readonly msg: string,
   readonly status: boolean
 }
@@ -87,4 +87,15 @@ export interface CreateAdminRequest {
   name: string;
   account: string;
   password: string;
+}
+
+export interface CreateCategoryRequest {
+  id: string;
+  name: string;
+  parent: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
 }

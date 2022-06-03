@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import { deleteAdminByID, getAdminByPage, getAdminDataBox } from '@/apis/admin'
 import { useMessage, withAlignCenter } from '@/utils'
 import { TableColumnData, TableData } from '@arco-design/web-vue'
 import { reactive, ref } from 'vue'
-import { IconUserGroup } from '@arco-design/web-vue/es/icon'
+import { IconArchive, IconBranch } from "@arco-design/web-vue/es/icon"
+import { deleteCategoryByID, getCategoriesByPage, getCategoryDataBox } from '@/apis/category'
 
 const $message = useMessage()
 
 const columns: TableColumnData[] = withAlignCenter([
   {
-    title: '工号',
+    title: '编号',
     dataIndex: 'id',
-    width: 150
   },
   {
-    title: '姓名',
-    dataIndex: 'name'
+    title: '名称',
+    dataIndex: 'name',
   },
   {
-    title: '账号',
-    dataIndex: 'account'
+    title: '父分类',
+    slotName: 'parent'
   },
   {
     title: '操作',
@@ -27,61 +26,68 @@ const columns: TableColumnData[] = withAlignCenter([
     width: 100
   }
 ])
+const tableData: TableData[] = reactive([])
+const total = ref(0)
+
+getCategoriesByPage()
+  .then(({data: res}) => {
+    total.value = res.data.total
+    tableData.push(...res.data.categories)
+  })
+
+function handleTablePageChange(page: number) {
+  getCategoriesByPage(page)
+    .then(({data: res}) => {
+      tableData.length = 0
+      tableData.push(...res.data.categories)
+    })
+}
 
 const dataBox = reactive({
-  total: -1
+  total: -1,
+  parents: -1
 })
-const total = ref(0)
-const tableData: TableData[] = reactive([])
 
-getAdminDataBox()
+getCategoryDataBox()
   .then(({data: res}) => {
     Object.assign(dataBox, res.data)
   })
 
-getAdminByPage()
-    .then(({data: res}) => {
-      total.value = res.data.total
-      tableData.push(...res.data.admin)
-    })
-
-function handleTablePageChange(page: number) {
-  getAdminByPage(page)
-    .then(({data: res}) => {
-      tableData.length = 0
-      tableData.push(...res.data.admin)
-    })
-}
-
-function deleteAdmin(id: string) {
-  deleteAdminByID(id)
+function deleteCategory(id: string) {
+  deleteCategoryByID(id)
     .then(() => {
       $message.success('删除成功')
-      getAdminByPage()
+      getCategoriesByPage()
         .then(({data: res}) => {
           total.value = res.data.total
           tableData.length = 0
-          tableData.push(...res.data.admin)
+          tableData.push(...res.data.categories)
         })
     })
 }
 </script>
 
 <template>
-  <div
-    class="data-box"
-    style="width: 80%"
-  >
-    <DataBox
-      title="管理员总数量"
-      :value="dataBox.total"
-    >
-      <icon-user-group :style="{fontSize: '22px'}" />
-    </DataBox>
-  </div>
   <div class="container">
+    <div
+      class="data-box"
+      style="width: 80%"
+    >
+      <DataBox
+        title="分类总数"
+        :value="dataBox.total"
+      >
+        <icon-archive :style="{fontSize: '22px'}" />
+      </DataBox>
+      <DataBox
+        title="父分类数"
+        :value="dataBox.parents"
+      >
+        <icon-branch :style="{fontSize: '22px'}" />
+      </DataBox>
+    </div>
     <div class="content-box">
-      <span class="content-title">管理员信息</span>
+      <span class="content-title">分类信息</span>
       <a-table
         class="table"
         :columns="columns"
@@ -94,10 +100,13 @@ function deleteAdmin(id: string) {
         page-position="bottom"
         @page-change="handleTablePageChange"
       >
+        <template #parent="{ record }">
+          <span> {{ record.parent ? record.parent.name : '-' }} </span>
+        </template>
         <template #operation="{ record }">
           <a-popconfirm
-            content="确定要删除吗？"
-            @ok="deleteAdmin(record.id)"
+            :content="`确定要删除吗？${record.parent ? '该分类为父分类，删除后子分类会一并删除' : ''}`"
+            @ok="deleteCategory(record.id)"
           >
             <a-button
               type="primary"
@@ -123,8 +132,8 @@ function deleteAdmin(id: string) {
 
     .content-box {
       @extend .component;
-      padding: 1.5rem;
       margin-top: 1.5rem;
+      padding: 1.5rem;
       
       .content-title {
         font-size: 1.3rem;

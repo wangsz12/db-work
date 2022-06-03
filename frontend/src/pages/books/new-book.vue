@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { createBook } from '@/apis/book'
+import { getAllSubCategories } from '@/apis/category'
 import { getPublisherByID } from '@/apis/publishers'
 import { useMessage } from '@/utils'
+import { Category } from '@/utils/types'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -19,6 +21,12 @@ const form = reactive({
 const publisher = reactive({
   name: '-'
 })
+const categories: Category[] = reactive([])
+
+getAllSubCategories()
+  .then(({data: res}) => {
+    categories.push(...res.data)
+  })
 
 function handlePublisherIDChange(e: Event) {
   const publisherID: string = (e.target as HTMLInputElement).value
@@ -98,15 +106,22 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             :rules="[
               {
                 required: true,
-                message: '分类为必填'
+                message: '分类为必选'
               }
             ]"
-            validate-trigger="input"
           >
-            <a-input
+            <a-select
               v-model="form.category"
-              placeholder="请输入图书分类"
-            />
+              placeholder="请选择图书分类"
+            >
+              <a-option
+                v-for="item in categories"
+                :key="item.id"
+                :value="item.id"
+              >
+                {{ item.name }}
+              </a-option>
+            </a-select>
           </a-form-item>
           <a-form-item
             field="isbn"

@@ -119,8 +119,7 @@ function deleteAdmin(id: string) {
     width: 100%;
     display: block;
     box-sizing: border-box;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding: 0 10%;
 
     .content-box {
       @extend .component;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getBookDataBox, getBooksByPage } from "@/apis/book"
-import { withAlignCenter } from "@/utils"
+import { deleteBookByID, getBookDataBox, getBooksByPage } from "@/apis/book"
+import { useMessage, withAlignCenter } from "@/utils"
 import { TableColumnData, TableData } from "@arco-design/web-vue"
 import {
   IconBook,
@@ -9,11 +9,13 @@ import {
 } from "@arco-design/web-vue/es/icon"
 import { reactive, ref } from "vue"
 
+const $message = useMessage()
+
 const columns: TableColumnData[] = withAlignCenter([
   {
     title: '编号',
     dataIndex: 'id',
-    width: 150
+    width: 100
   },
   {
     title: '名称',
@@ -26,12 +28,12 @@ const columns: TableColumnData[] = withAlignCenter([
   {
     title: '数量',
     dataIndex: 'quantity',
-    width: 100
+    width: 80
   },
   {
     title: '类别',
     dataIndex: 'category',
-    width: 150
+    width: 200
   },
   {
     title: '出版社',
@@ -43,6 +45,11 @@ const columns: TableColumnData[] = withAlignCenter([
     dataIndex: 'isbn',
     width: 150
   },
+  {
+    title: '操作',
+    slotName: 'operation',
+    width: 100
+  }
 ])
 
 const total = ref(0)
@@ -67,6 +74,19 @@ getBooksByPage()
   .finally(() => {
     loading.value = false
   })
+
+function deleteBook(id: string) {
+  deleteBookByID(id)
+    .then(() => {
+      $message.success('删除成功')
+      getBooksByPage()
+        .then(({data: res}) => {
+          total.value = res.data.total
+          tableData.length = 0
+          tableData.push(...res.data.books)
+        })
+    })
+}
 
 function handleTablePageChange(page: number) {
   getBooksByPage(page)
@@ -118,7 +138,22 @@ function handleTablePageChange(page: number) {
         }"
         page-position="bottom"
         @page-change="handleTablePageChange"
-      />
+      >
+        <template #operation="{ record }">
+          <a-popconfirm
+            content="确定要删除吗？"
+            @ok="deleteBook(record.id)"
+          >
+            <a-button
+              type="primary"
+              size="mini"
+              status="danger"
+            >
+              删除
+            </a-button>
+          </a-popconfirm>
+        </template>
+      </a-table>
     </div>
   </div>
 </template>

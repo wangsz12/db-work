@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import { useRouter } from "vue-router"
 
 const Axios = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : 'https://api.wangsz12.top/dbwork/',
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : 'https://dbwork.wangsz12.top/api',
   timeout: 10000
 })
 

@@ -60,6 +60,23 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/categories',
+    name: 'categories',
+    component: () => import('@/layout/main-layout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-categories',
+        component: () => import('@/pages/categories/all-categories.vue')
+      },
+      {
+        path: 'new',
+        name: 'new-category',
+        component: () => import('@/pages/categories/new-category.vue')
+      }
+    ]
+  },
+  {
     path: '/cards',
     name: 'cards',
     component: () => import('@/layout/main-layout.vue'),

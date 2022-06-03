@@ -22,7 +22,8 @@
       "@/*": ["src/*"],
     },
     "types": [
-      "pinia-plugin-persist"
+      "pinia-plugin-persist",
+      "node"
     ]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

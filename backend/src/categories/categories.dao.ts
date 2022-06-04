@@ -50,14 +50,6 @@ export class CategoriesDao {
     return DB2CategoryEntity(res);
   }
 
-  async findAllSub(): Promise<CategoryEntity[]> {
-    const res = await executeSQL(
-      'SELECT id, name FROM category WHERE parent IS NOT NULL',
-    );
-
-    return DB2CategoryEntity(res);
-  }
-
   async findOneByID(id: string): Promise<CategoryEntity> {
     const res = await executeSQL('SELECT * FROM category WHERE id=?', [id]);
 

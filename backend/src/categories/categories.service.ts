@@ -18,8 +18,8 @@ export class CategoriesService {
     return await this.categoriesDao.findAllParent();
   }
 
-  async findAllSub(): Promise<CategoryEntity[]> {
-    return await this.categoriesDao.findAllSub();
+  async findOneByID(id: string): Promise<CategoryEntity> {
+    return await this.categoriesDao.findOneByID(id);
   }
 
   async create(

@@ -95,7 +95,7 @@ export class BooksDao {
         book.name,
         book.author,
         book.quantity,
-        book.category,
+        book.category.id,
         book.isbn,
         book.price,
       ]);

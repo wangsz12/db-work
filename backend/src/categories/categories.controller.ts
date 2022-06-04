@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ResponseData } from 'src/types';
 import { falseReturn, trueReturn } from 'src/utils';
 import { CategoriesService } from './categories.service';
@@ -28,16 +36,9 @@ export class CategoriesController {
     );
   }
 
-  @Get('sub')
-  async findAllSub(): Promise<ResponseData> {
-    const res = await this.categoriesService.findAllSub();
-
-    return trueReturn(
-      res.map(({ id, name }) => ({
-        id,
-        name: `${id} / ${name}`,
-      })),
-    );
+  @Get(':id')
+  async findOneByID(@Param('id') id: string): Promise<ResponseData> {
+    return trueReturn(await this.categoriesService.findOneByID(id));
   }
 
   @Post()

@@ -13,6 +13,10 @@ export function getCategoriesByPage(page = 1) {
   })
 }
 
+export function getCategoryByID(id: string) {
+  return Axios.get(`/categories/${id}`)
+}
+
 export function deleteCategoryByID(id: string) {
   return Axios.delete('/categories', {
     params: {
@@ -23,10 +27,6 @@ export function deleteCategoryByID(id: string) {
 
 export function getAllParentCategories() {
   return Axios.get('/categories/parent')
-}
-
-export function getAllSubCategories() {
-  return Axios.get('/categories/sub')
 }
 
 export function createCategory({ id, name, parent }: CreateCategoryRequest, isParent: boolean) {

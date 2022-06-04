@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { createBook } from '@/apis/book'
-import { getAllSubCategories } from '@/apis/category'
+import { getCategoryByID } from '@/apis/category'
 import { getPublisherByID } from '@/apis/publishers'
 import { useMessage } from '@/utils'
-import { Category } from '@/utils/types'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const $message = useMessage()
@@ -18,22 +17,22 @@ const form = reactive({
   publisherID: '',
   price: 0,
 })
-const publisher = reactive({
-  name: '-'
-})
-const categories: Category[] = reactive([])
+const publisher = ref('')
+const category = ref('')
 
-getAllSubCategories()
-  .then(({data: res}) => {
-    categories.push(...res.data)
-  })
+function handleCategoryIDChange(e: Event) {
+  getCategoryByID((e.target as HTMLInputElement).value)
+    .then(({data: res}) => {
+      category.value = res.data.name
+    })
+}
 
 function handlePublisherIDChange(e: Event) {
   const publisherID: string = (e.target as HTMLInputElement).value
   if (/^P\d{4}$/.test(publisherID)) {
     getPublisherByID(publisherID)
       .then(({data: res}) => {
-        publisher.name = res.data.name
+        publisher.value = res.data.name
       })
   }
 }
@@ -102,26 +101,26 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
           </a-form-item>
           <a-form-item
             field="category"
-            label="分类"
+            label="分类编号"
             :rules="[
               {
                 required: true,
-                message: '分类为必选'
+                message: '分类编号为必填'
               }
             ]"
+            @change="handleCategoryIDChange"
           >
-            <a-select
+            <a-input
               v-model="form.category"
-              placeholder="请选择图书分类"
-            >
-              <a-option
-                v-for="item in categories"
-                :key="item.id"
-                :value="item.id"
-              >
-                {{ item.name }}
-              </a-option>
-            </a-select>
+              :max-length="3"
+              placeholder="请输入分类编号"
+            />
+          </a-form-item>
+          <a-form-item
+            field="categoryName"
+            label="分类名称"
+          >
+            <span> {{ category }} </span>
           </a-form-item>
           <a-form-item
             field="isbn"
@@ -170,7 +169,7 @@ function handleSubmit({values, errors}: {values: any, errors: unknown}) {
             field="publisherName"
             label="出版商名称"
           >
-            <span> {{ publisher.name }} </span>
+            <span> {{ publisher }} </span>
           </a-form-item>
           <a-form-item
             field="price"

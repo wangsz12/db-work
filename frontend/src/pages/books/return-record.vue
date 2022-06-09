@@ -39,12 +39,6 @@ const columns: TableColumnData[] = withAlignCenter([
     dataIndex: 'fine',
     slotName: 'fine',
     width: 150
-  },
-  {
-    title: '是否已缴纳',
-    dataIndex: 'paid',
-    slotName: 'paid',
-    width: 110
   }
 ])
 const tableData: TableData[] = reactive([])
@@ -87,15 +81,6 @@ function handleTablePageChange(page: number) {
         </template>
         <template #fine="{ record }">
           <span> {{ record.fine > 0 ? `${record.fine}元` : '-' }} </span>
-        </template>
-        <template #paid="{ record }">
-          <span :style="`${record.isOverdue && !record.paid ? 'color: #fc243a' : ''}`">
-            {{
-              record.isOverdue
-                ? record.paid ? '是' : '否'
-                : '-'
-            }}
-          </span>
         </template>
       </a-table>
     </div>
